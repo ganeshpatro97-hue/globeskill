@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+:root {
+  --primary-navy: #0f172a;
+  --brand-emerald: #059669;
+  --brand-emerald-dark: #047857;
+  --brand-teal: #0d9488;
+  --surface-light: #ffffff;
+  --surface-slate: #f8fafc;
+  --border-subtle: #e2e8f0;
+}
+
+/* Accessible focus outlines */
+*:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+}
+
+/* Clean, crisp typography */
+body {
+  color: #1e293b;
+  background-color: #f8fafc;
+}
