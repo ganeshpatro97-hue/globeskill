@@ -11,12 +11,7 @@ import {
   Download, 
   FileText, 
   ShieldCheck, 
-  Users, 
-  Sparkles, 
-  ExternalLink, 
-  CheckCircle2,
-  Calendar,
-  CreditCard
+  Users
 } from 'lucide-react';
 
 export default function DonorDashboardPage() {

@@ -8,13 +8,8 @@ import {
   BookOpen, 
   Heart, 
   ShieldCheck, 
-  Sparkles, 
   ArrowRight, 
-  Bot, 
-  CheckCircle2, 
-  Award,
-  Layers,
-  Code2
+  CheckCircle2
 } from "lucide-react";
 
 export default function Home() {

@@ -16,8 +16,7 @@ import {
   PlayCircle, 
   Download, 
   ArrowLeft,
-  Sparkles,
-  Share2
+  Sparkles
 } from 'lucide-react';
 
 export default function CourseDetailPage() {

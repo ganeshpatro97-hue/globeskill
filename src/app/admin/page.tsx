@@ -13,19 +13,14 @@ import {
   BookOpen, 
   TrendingUp, 
   Download, 
-  CheckCircle2, 
-  XCircle, 
   Search, 
-  Filter, 
   BarChart3, 
   FileSpreadsheet,
-  Sparkles,
   Layers,
   HeartHandshake
 } from 'lucide-react';
 
 export default function AdminDashboardPage() {
-  const { profile } = useAuth();
   const [metrics, setMetrics] = useState<AdminMetrics | null>(null);
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);

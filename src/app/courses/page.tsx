@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Course, CourseCategory, SkillLevel } from '@/types/database';
+import { Course } from '@/types/database';
 import { getAllCourses } from '@/lib/services/course.service';
 import { enrollStudentInCourse } from '@/lib/services/enrollment.service';
 import { useAuth } from '@/context/AuthContext';

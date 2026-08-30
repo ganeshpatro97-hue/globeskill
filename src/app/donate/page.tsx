@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import confetti from 'canvas-confetti';
 import { DonationStats, DonationCause } from '@/types/database';
 import { getDonationStats } from '@/lib/services/donation.service';
 import { useAuth } from '@/context/AuthContext';
 import { 
   Heart, 
-  Sparkles, 
   ShieldCheck, 
   Users, 
   CheckCircle2, 
@@ -15,8 +15,6 @@ import {
   QrCode, 
   Landmark, 
   Download, 
-  FileText,
-  TrendingUp,
   Award
 } from 'lucide-react';
 
@@ -199,6 +197,12 @@ export default function SupportUsPage() {
                   >
                     <Download className="w-4 h-4" /> Download Official 80G Tax Receipt
                   </a>
+                  <Link
+                    href="/donate/success"
+                    className="w-full sm:w-auto px-5 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition-colors text-center"
+                  >
+                    View Verified Impact Details &rarr;
+                  </Link>
                   <button
                     onClick={() => {
                       setSuccessReceiptUrl(null);
