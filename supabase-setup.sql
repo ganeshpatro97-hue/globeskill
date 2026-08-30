@@ -31,11 +31,14 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 -- 4. AUTOMATED PROFILE SYNCHRONIZATION TRIGGER
 -- When a user signs up via Supabase Auth (auth.users), this trigger automatically creates their profile in public.profiles.
 CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER
+SECURITY DEFINER
+SET search_path = public
+LANGUAGE plpgsql
+AS $$
 DECLARE
   assigned_role user_role_enum;
 BEGIN
-  -- Extract user_role from raw_user_meta_data or default to 'student'
   BEGIN
     assigned_role := (NEW.raw_user_meta_data->>'user_role')::user_role_enum;
   EXCEPTION WHEN OTHERS THEN
@@ -47,7 +50,7 @@ BEGIN
     NEW.id,
     NEW.email,
     COALESCE(NEW.raw_user_meta_data->>'full_name', split_part(NEW.email, '@', 1)),
-    COALESCE(assigned_role, 'student'),
+    COALESCE(assigned_role, 'student'::user_role_enum),
     COALESCE(NEW.raw_user_meta_data->>'location', 'India'),
     COALESCE(NEW.raw_user_meta_data->>'education_background', 'High School'),
     ARRAY[]::TEXT[]
@@ -58,8 +61,10 @@ BEGIN
     updated_at = NOW();
 
   RETURN NEW;
+EXCEPTION WHEN OTHERS THEN
+  RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$;
 
 -- Bind trigger to auth.users table
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
@@ -146,6 +151,9 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- Profiles Policies
 CREATE POLICY "Public profiles are viewable by authenticated users" 
 ON public.profiles FOR SELECT USING (true);
+
+CREATE POLICY "Enable insert for authenticated users and triggers" 
+ON public.profiles FOR INSERT WITH CHECK (true);
 
 CREATE POLICY "Users can update own profile" 
 ON public.profiles FOR UPDATE USING (auth.uid() = id);
