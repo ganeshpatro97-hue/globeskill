@@ -8,15 +8,14 @@ import { PlatformStatus } from "@/types/platform";
  */
 export async function getPlatformStatus(): Promise<PlatformStatus> {
   // Encapsulated domain logic:
-  // In a larger system, this service can query databases, cache services, or external status probes.
   return {
     status: "ok",
     project: "GlobeSkill",
     message: "GlobeSkill backend is running",
     platformStatus: "Online",
-    currentPhase: "Phase 1 - Digital & AI Literacy Initiative",
+    currentPhase: "Phase 1 - 5: Full-Stack Educational Platform & AI Assistant",
     timestamp: new Date().toISOString(),
-    version: "1.0.0",
+    version: "2.0.0",
     details: {
       mission: "Technology & AI Education for Every Child",
       targetAudience: "Underserved learners and grassroots educational communities",
