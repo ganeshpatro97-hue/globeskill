@@ -14,37 +14,52 @@ export interface SignUpParams {
 export async function signUpUser(params: SignUpParams): Promise<UserProfile> {
   const { email, password, fullName, role, location, educationBackground, skillInterests } = params;
 
-  if (isSupabaseConfigured && supabase) {
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email,
-      password: password || 'GlobeSkillPass@2026',
-      options: {
-        data: {
-          full_name: fullName,
-          user_role: role,
-        },
-      },
-    });
+  // 1. Try server-side API registration with auto-confirmation
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password: password || 'GlobeSkillPass@2026',
+          fullName,
+          userRole: role,
+        }),
+      });
 
-    if (authError) {
-      throw new Error(authError.message);
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Registration failed.');
+      }
+
+      // Automatically sign in the user to create client session
+      if (isSupabaseConfigured && supabase) {
+        try {
+          await supabase.auth.signInWithPassword({
+            email,
+            password: password || 'GlobeSkillPass@2026',
+          });
+        } catch {
+          // Non-blocking
+        }
+      }
+
+      return {
+        id: data.user.id || `user_${Date.now()}`,
+        email: data.user.email,
+        full_name: data.user.fullName || fullName,
+        user_role: data.user.role || role,
+        location: location || 'India',
+        education_background: educationBackground || 'High School',
+        skill_interests: skillInterests || [],
+        created_at: new Date().toISOString(),
+      };
+    } catch (err: unknown) {
+      if (err instanceof Error && !err.message.includes('fetch')) {
+        throw err;
+      }
     }
-
-    const userId = authData.user?.id || `user_${Date.now()}`;
-    const newProfile: UserProfile = {
-      id: userId,
-      email,
-      full_name: fullName,
-      user_role: role,
-      location: location || '',
-      education_background: educationBackground || '',
-      skill_interests: skillInterests || [],
-      created_at: new Date().toISOString(),
-    };
-
-    // Save to database profiles table
-    await supabase.from('profiles').upsert(newProfile);
-    return newProfile;
   }
 
   // Local Mock Store implementation

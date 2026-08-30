@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase-client';
+import { supabase, supabaseAdmin, isSupabaseConfigured } from '@/lib/supabase-client';
 import { signUpUser } from '@/lib/services/auth.service';
 
 /**
  * USER SIGNUP ROUTE (app/api/auth/signup/route.ts)
  * Handles creating a new user account with Email, Password, Full Name, and Role.
- * The PostgreSQL database automatically populates the public.profiles table using triggers (defined in supabase-setup.sql).
+ * Automatically confirms user email for immediate, frictionless login.
  */
 export async function POST(request: Request) {
   try {
@@ -34,8 +34,60 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. Register user via Supabase Auth when configured
-    if (isSupabaseConfigured && supabase) {
+    // 2. Register user via Supabase Admin (auto-confirm email) or standard client
+    if (supabaseAdmin) {
+      const { data, error } = await supabaseAdmin.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: {
+          full_name: fullName,
+          user_role: userRole,
+        },
+      });
+
+      if (error) {
+        // If user already registered, try standard signup
+        if (error.message.includes('already been registered') && supabase) {
+          const { data: stdData, error: stdError } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              data: { full_name: fullName, user_role: userRole },
+            },
+          });
+          if (stdError) {
+            return NextResponse.json({ error: stdError.message }, { status: 400 });
+          }
+          return NextResponse.json(
+            {
+              message: 'Registration successful! Profile created.',
+              user: {
+                id: stdData.user?.id,
+                email: stdData.user?.email,
+                role: userRole,
+                fullName: fullName,
+              },
+            },
+            { status: 201 }
+          );
+        }
+        return NextResponse.json({ error: error.message }, { status: error.status || 400 });
+      }
+
+      return NextResponse.json(
+        {
+          message: 'Registration successful! Profile created.',
+          user: {
+            id: data.user?.id,
+            email: data.user?.email,
+            role: userRole,
+            fullName: fullName,
+          },
+        },
+        { status: 201 }
+      );
+    } else if (isSupabaseConfigured && supabase) {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,

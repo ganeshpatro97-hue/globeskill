@@ -25,14 +25,18 @@ if (!supabaseUrl || !supabaseAnonKey || !isSupabaseConfigured) {
   }
 }
 
-/**
- * Singleton instance of the Supabase Client.
- * Used for database queries, profile management, and authentication operations.
- */
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
 export const supabase: SupabaseClient = createClient(
   supabaseUrl || 'https://placeholder-project-url.supabase.co',
   supabaseAnonKey || 'placeholder-anon-key'
 );
+
+export const supabaseAdmin: SupabaseClient | null = (supabaseUrl && supabaseServiceKey && !supabaseServiceKey.includes('your-'))
+  ? createClient(supabaseUrl, supabaseServiceKey, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    })
+  : null;
 
 // Helper TypeScript Interfaces for Database Entities
 export type UserRole = 'student' | 'trainer' | 'admin' | 'donor';
