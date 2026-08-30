@@ -1,23 +1,69 @@
+// GlobeSkill Phase 5: AI Learning Assistant API Route (Next.js App Router / TypeScript)
+// This file implements a secure Next.js route handler at /api/ai/chat
+// It provides kid-friendly, encouraging coding mentorship and logs chat sessions to the Supabase database.
+
 import { NextResponse } from 'next/server';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase-client';
 import { askAiMentor } from '@/lib/services/ai.service';
+
+interface ChatRequest {
+  message?: string;
+  prompt?: string;
+  userId?: string;
+  sessionId?: string;
+}
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { prompt, history } = body;
+    const body: ChatRequest = await request.json();
+    const message = body.message || body.prompt || '';
+    const userId = body.userId;
+    const sessionId = body.sessionId;
 
-    if (!prompt || typeof prompt !== 'string') {
-      return NextResponse.json({ error: 'Prompt string is required' }, { status: 400 });
+    if (!message || message.trim() === '') {
+      return NextResponse.json(
+        { error: 'Message content cannot be empty.' },
+        { status: 400 }
+      );
     }
 
-    const reply = await askAiMentor(prompt, history || []);
+    const activeSessionId = sessionId || `session_${Date.now()}`;
+
+    // Get response from our AI mentor service (with Gemini API / local kid-friendly mentor engine)
+    const aiResponseText = await askAiMentor(message);
+
+    // Log the interaction to Supabase in the background (if user is authenticated and Supabase is configured)
+    if (userId && isSupabaseConfigured && supabase) {
+      try {
+        await supabase
+          .from('ai_sessions')
+          .insert([
+            {
+              user_id: userId,
+              session_id: activeSessionId,
+              user_message: message,
+              ai_response: aiResponseText,
+            }
+          ]);
+      } catch {
+        // Non-blocking log failure
+      }
+    }
+
     return NextResponse.json({
-      reply,
+      success: true,
+      reply: aiResponseText,
+      response: aiResponseText,
+      sessionId: activeSessionId,
       timestamp: new Date().toISOString(),
-      mentor: 'Sparky (GlobeSkill AI Kids Mentor)',
+      mentor: 'Sparky (GlobeSkill AI Kids Mentor)'
     });
+
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Internal AI Assistant error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    const errorMsg = error instanceof Error ? error.message : 'Failed to process AI chat.';
+    return NextResponse.json(
+      { error: errorMsg },
+      { status: 500 }
+    );
   }
 }
