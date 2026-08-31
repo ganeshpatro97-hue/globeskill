@@ -1,23 +1,9 @@
 import { AiChatMessage } from '@/types/database';
+import { LanguageCode, getLocalizedSystemPrompt } from '@/context/LanguageContext';
 
-const SYSTEM_PROMPT = `
-You are 'Sparky', the GlobeSkill AI Coding Mentor for Kids and Young Learners.
-Your mission is to make computer science, coding, and Artificial Intelligence exciting, friendly, and super simple to understand for children from underserved communities.
-
-Key Guidelines:
-1. Use warm, encouraging, kid-friendly analogies:
-   - Variables = labelled toy boxes or storage bins where you keep your favourite toys.
-   - Loops = a merry-go-round or repeating your morning brushing routine.
-   - Functions = magic recipe cards where you put in ingredients and get a delicious treat.
-   - If/Else = choosing between eating an ice cream or wearing a raincoat when it pours.
-   - Neural Networks / AI = a brain made of lightbulbs that learn to recognize patterns after seeing lots of pictures.
-2. Provide short, colorful, easy-to-read code snippets (Python or JavaScript).
-3. Always ask an engaging follow-up question or suggest a fun mini-experiment.
-4. Keep the tone inspiring, uplifting, and clear.
-`;
-
-export async function askAiMentor(userPrompt: string, _history: AiChatMessage[] = []): Promise<string> {
+export async function askAiMentor(userPrompt: string, _history: AiChatMessage[] = [], lang: LanguageCode = 'en'): Promise<string> {
   const apiKey = process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY;
+  const systemPrompt = getLocalizedSystemPrompt(lang);
 
   if (apiKey && !apiKey.includes('your-')) {
     try {
@@ -26,7 +12,7 @@ export async function askAiMentor(userPrompt: string, _history: AiChatMessage[] 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [
-            { role: 'user', parts: [{ text: `${SYSTEM_PROMPT}\n\nStudent asked: ${userPrompt}` }] }
+            { role: 'user', parts: [{ text: `${systemPrompt}\n\nStudent asked (in ${lang}): ${userPrompt}` }] }
           ]
         })
       });
@@ -41,13 +27,60 @@ export async function askAiMentor(userPrompt: string, _history: AiChatMessage[] 
     }
   }
 
-  // Resilient Domain AI Mentor Engine
-  return generateKidsMentorResponse(userPrompt);
+  // Resilient Domain AI Mentor Engine (Multilingual fallback)
+  return generateKidsMentorResponse(userPrompt, lang);
 }
 
-function generateKidsMentorResponse(prompt: string): string {
+function generateKidsMentorResponse(prompt: string, lang: LanguageCode = 'en'): string {
   const p = prompt.toLowerCase();
 
+  // Hindi responses
+  if (lang === 'hi') {
+    if (p.includes('variable') || p.includes('वेरिएबल') || p.includes('store')) {
+      return `🌟 **वेरिएबल (Variable) को खिलौनों के लेबल वाले डिब्बे की तरह समझें!**
+
+मान लीजिए आपके पास एक डिब्बा है जिस पर **\`player_score\`** लिखा है। अभी आपने उसमें नंबर \`10\` रखा है!
+
+पायथन (Python) में इसे ऐसे लिखते हैं:
+\`\`\`python
+player_score = 10
+print("आपका स्कोर है:", player_score)
+\`\`\`
+
+💡 **मज़ेदार सवाल:** क्या आप \`my_superpower\` नाम के वेरिएबल में अपनी पसंदीदा सुपरपावर स्टोर करना चाहेंगे? मुझे बताएं!`;
+    }
+
+    if (p.includes('loop') || p.includes('लूप') || p.includes('repeat')) {
+      return `🎡 **लूप्स (Loops) एक मज़ेदार झूले की तरह होते हैं!**
+
+बार-बार एक ही काम लिखने के बजाय, लूप कंप्यूटर को स्वचालित रूप से वही काम दोहराने के लिए कहता है!
+
+\`\`\`python
+for count in range(1, 6):
+    print(f"⭐ स्टार #{count}: चमकते रहो, युवा कोडर!")
+\`\`\`
+
+🚀 क्या आप 10 से 1 तक रॉकेट लॉन्च काउंटडाउन का लूप बनाना चाहते हैं?`;
+    }
+  }
+
+  // Tamil responses
+  if (lang === 'ta') {
+    if (p.includes('variable') || p.includes('store')) {
+      return `🌟 **Variable என்பது பெயர் ஒட்டப்பட்ட பொம்மை பெட்டி போன்றது!**
+
+உங்களிடம் **\`player_score\`** என்ற லேபிளுடன் ஒரு பெட்டி உள்ளது என்று கற்பனை செய்து பாருங்கள். இப்போது அதில் \`10\` என்ற எண்ணை வைக்கிறீர்கள்!
+
+\`\`\`python
+player_score = 10
+print("உங்கள் மதிப்பெண்:", player_score)
+\`\`\`
+
+💡 அடுத்த நிலைக்குச் செல்லும்போது, அந்தப் பெட்டியில் மதிப்பை எளிதாக மாற்றலாம்!`;
+    }
+  }
+
+  // Default English responses
   if (p.includes('variable') || p.includes('store') || p.includes('what is a variable')) {
     return `🌟 **Think of a Variable like a Labelled Toy Box!**
 

@@ -9,10 +9,10 @@ import { ShieldAlert, ArrowRight, UserCheck } from 'lucide-react';
 interface RoleGateProps {
   allowedRoles: UserRole[];
   children: React.ReactNode;
-  portalName: string;
+  portalName?: string;
 }
 
-export default function RoleGate({ allowedRoles, children, portalName }: RoleGateProps) {
+export default function RoleGate({ allowedRoles, children, portalName = 'Portal' }: RoleGateProps) {
   const { role, loading, switchDemoRole } = useAuth();
 
   if (loading) {
@@ -42,8 +42,8 @@ export default function RoleGate({ allowedRoles, children, portalName }: RoleGat
             <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700 uppercase tracking-wider mb-2.5">
               <UserCheck className="w-3.5 h-3.5 text-emerald-600" /> Switch Demo Role to Continue:
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {(['student', 'trainer', 'admin', 'donor'] as UserRole[]).map((r) => (
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+              {(['student', 'trainer', 'admin', 'donor', 'recruiter'] as UserRole[]).map((r) => (
                 <button
                   key={r}
                   onClick={() => switchDemoRole(r)}

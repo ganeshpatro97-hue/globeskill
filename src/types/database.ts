@@ -1,4 +1,4 @@
-export type UserRole = 'student' | 'trainer' | 'admin' | 'donor';
+export type UserRole = 'student' | 'trainer' | 'admin' | 'donor' | 'recruiter';
 
 export interface UserProfile {
   id: string;
@@ -134,3 +134,48 @@ export interface AdminMetrics {
   monthlyEnrollments: { month: string; count: number }[];
   causeFunding: { cause: string; amount: number }[];
 }
+
+// Phase 8: Employment Matchmaking & AI Portfolio Types
+export interface StudentProject {
+  id: string;
+  title: string;
+  description: string;
+  technologies: string[];
+  demo_url?: string;
+  github_url?: string;
+  completed_at: string;
+}
+
+export interface StudentPortfolio {
+  id: string;
+  student_id: string;
+  full_name: string;
+  email: string;
+  headline: string;
+  location: string;
+  summary: string;
+  technical_skills: string[];
+  soft_skills: string[];
+  verified_certificates: string[];
+  projects: StudentProject[];
+  match_score?: number; // 0-100% for recruiters
+  employability_status: 'ready_for_internship' | 'actively_upskilling' | 'placed';
+  updated_at: string;
+}
+
+export interface JobOpportunity {
+  id: string;
+  recruiter_id: string;
+  company_name: string;
+  company_logo?: string;
+  title: string;
+  role_type: 'Internship' | 'Apprenticeship' | 'Entry Level Tech' | 'CSR Trainee';
+  location: string;
+  stipend_range: string;
+  required_skills: string[];
+  description: string;
+  openings_count: number;
+  applicants_count: number;
+  created_at: string;
+}
+

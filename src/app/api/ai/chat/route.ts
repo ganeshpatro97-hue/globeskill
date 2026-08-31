@@ -6,11 +6,15 @@ import { NextResponse } from 'next/server';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase-client';
 import { askAiMentor } from '@/lib/services/ai.service';
 
+import { LanguageCode } from '@/context/LanguageContext';
+
 interface ChatRequest {
   message?: string;
   prompt?: string;
   userId?: string;
   sessionId?: string;
+  language?: LanguageCode;
+  lang?: LanguageCode;
 }
 
 export async function POST(request: Request) {
@@ -19,6 +23,7 @@ export async function POST(request: Request) {
     const message = body.message || body.prompt || '';
     const userId = body.userId;
     const sessionId = body.sessionId;
+    const language: LanguageCode = body.language || body.lang || 'en';
 
     if (!message || message.trim() === '') {
       return NextResponse.json(
@@ -29,8 +34,8 @@ export async function POST(request: Request) {
 
     const activeSessionId = sessionId || `session_${Date.now()}`;
 
-    // Get response from our AI mentor service (with Gemini API / local kid-friendly mentor engine)
-    const aiResponseText = await askAiMentor(message);
+    // Get response from our AI mentor service with dynamic vernacular language prompting
+    const aiResponseText = await askAiMentor(message, [], language);
 
     // Log the interaction to Supabase in the background (if user is authenticated and Supabase is configured)
     if (userId && isSupabaseConfigured && supabase) {

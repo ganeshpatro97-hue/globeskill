@@ -3,15 +3,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Sparkles, X, Send, RotateCcw } from 'lucide-react';
 import { AiChatMessage } from '@/types/database';
-
-const QUICK_PROMPTS = [
-  'What is a variable in simple words?',
-  'How do loops work in coding?',
-  'How does Artificial Intelligence actually learn?',
-  'Can you show me a fun Python code example?',
-];
+import { useTranslation } from '@/context/LanguageContext';
 
 export default function AiLearningAssistant() {
+  const { language, t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,13 +14,33 @@ export default function AiLearningAssistant() {
     {
       id: 'welcome-msg',
       sender: 'assistant',
-      text: "👋 Hi there! I'm **Sparky**, your GlobeSkill AI Coding Mentor! Ask me anything about coding, loops, Python, or Artificial Intelligence—I'm here to help you learn with fun analogies!",
+      text: t('aiMentorWelcome'),
       timestamp: 'Just now',
     },
   ]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messageIdCounter = useRef(0);
+
+  // Update welcome message if language changes and only welcome message exists
+  useEffect(() => {
+    if (messages.length === 1 && messages[0].id === 'welcome-msg') {
+      setMessages([
+        {
+          id: 'welcome-msg',
+          sender: 'assistant',
+          text: t('aiMentorWelcome'),
+          timestamp: 'Just now',
+        },
+      ]);
+    }
+  }, [language, t]);
+
+  const quickPrompts = [
+    t('suggestedQuery1'),
+    t('suggestedQuery2'),
+    t('suggestedQuery3'),
+  ];
 
   useEffect(() => {
     if (isOpen) {
@@ -58,6 +73,7 @@ export default function AiLearningAssistant() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           prompt: textToSend,
+          language,
           history: messages,
         }),
       });
@@ -93,7 +109,7 @@ export default function AiLearningAssistant() {
       {
         id: 'welcome-reset',
         sender: 'assistant',
-        text: "✨ Fresh chat started! Ask Sparky any question about coding, algorithms, or AI!",
+        text: t('aiMentorWelcome'),
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       },
     ]);
@@ -131,7 +147,7 @@ export default function AiLearningAssistant() {
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <h3 className="font-bold text-sm">Sparky AI Mentor</h3>
+                  <h3 className="font-bold text-sm">{t('aiMentorTitle')}</h3>
                   <span className="text-[10px] bg-emerald-500/40 text-emerald-100 px-1.5 py-0.5 rounded font-mono font-semibold">Kids Edition</span>
                 </div>
                 <p className="text-[11px] text-emerald-100/90 flex items-center gap-1">
@@ -209,7 +225,7 @@ export default function AiLearningAssistant() {
 
           {/* Quick Prompt Chips */}
           <div className="p-2 bg-white border-t border-slate-100 flex gap-1.5 overflow-x-auto no-scrollbar">
-            {QUICK_PROMPTS.map((prompt, idx) => (
+            {quickPrompts.map((prompt, idx) => (
               <button
                 key={idx}
                 onClick={() => handleSend(prompt)}
@@ -232,7 +248,7 @@ export default function AiLearningAssistant() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask Sparky any coding question..."
+              placeholder={t('placeholderChat')}
               className="flex-1 text-xs bg-slate-100/90 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all placeholder:text-slate-400"
             />
             <button

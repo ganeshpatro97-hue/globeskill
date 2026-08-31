@@ -55,6 +55,15 @@ const DEMO_ACCOUNTS: Record<UserRole, Partial<UserProfile>> = {
     education_background: 'Tech Philanthropist',
     skill_interests: ['Rural Digital Labs', 'AI for Kids'],
   },
+  recruiter: {
+    id: '00000000-0000-0000-0000-000000000005',
+    email: 'recruiter.ananya@techforgood.org',
+    full_name: 'Ananya Deshmukh (CSR Recruiter)',
+    user_role: 'recruiter',
+    location: 'Hyderabad, India',
+    education_background: 'CSR Talent & University Partnerships Lead',
+    skill_interests: ['Youth AI Hiring', 'Vocational Apprenticeships', 'Diversity & Inclusion'],
+  },
 };
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {

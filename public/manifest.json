@@ -1,0 +1,31 @@
+{
+  "name": "GlobeSkill - AI & Tech Education for Every Child",
+  "short_name": "GlobeSkill",
+  "description": "Accessible digital skilling, AI micro degrees, and vocational learning for underserved youth.",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#059669",
+  "orientation": "any",
+  "categories": ["education", "productivity", "social"],
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Student Portal",
+      "url": "/student",
+      "description": "Resume your coding lessons"
+    },
+    {
+      "name": "Explore Courses",
+      "url": "/courses",
+      "description": "Browse catalog"
+    }
+  ]
+}
