@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Sparkles, X, Send, RotateCcw } from 'lucide-react';
 import { AiChatMessage } from '@/types/database';
 import { useTranslation } from '@/context/LanguageContext';
+import VoiceNarrator from '@/components/VoiceNarrator';
 
 export default function AiLearningAssistant() {
   const { language, t } = useTranslation();
@@ -196,13 +197,20 @@ export default function AiLearningAssistant() {
                   }`}
                 >
                   <p>{msg.text}</p>
-                  <span
-                    className={`block text-[9px] mt-1 text-right ${
-                      msg.sender === 'user' ? 'text-emerald-200' : 'text-slate-400'
-                    }`}
-                  >
-                    {msg.timestamp}
-                  </span>
+                  <div className="flex items-center justify-between mt-2 pt-1 border-t border-slate-100/80">
+                    {msg.sender === 'assistant' ? (
+                      <VoiceNarrator text={msg.text} lang={language} label="Listen" className="text-[10px] py-0.5 px-2" />
+                    ) : (
+                      <span></span>
+                    )}
+                    <span
+                      className={`text-[9px] ${
+                        msg.sender === 'user' ? 'text-emerald-200' : 'text-slate-400'
+                      }`}
+                    >
+                      {msg.timestamp}
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}

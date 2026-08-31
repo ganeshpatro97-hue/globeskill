@@ -19,7 +19,8 @@ import {
   Compass,
   Briefcase,
   FileCheck,
-  Award
+  Award,
+  Code2
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -74,40 +75,48 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-5 text-sm font-medium text-slate-600">
+        <nav className="hidden md:flex items-center gap-4 text-xs font-semibold text-slate-600">
           <Link 
             href="/courses" 
-            className={`flex items-center gap-1.5 hover:text-emerald-700 transition-colors ${pathname === '/courses' ? 'text-emerald-700 font-semibold' : ''}`}
+            className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/courses' ? 'text-emerald-700 font-bold' : ''}`}
           >
-            <Compass className="w-4 h-4 text-emerald-600" />
+            <Compass className="w-3.5 h-3.5 text-emerald-600" />
             {t('coursesNav')}
           </Link>
           <Link 
-            href="/student/portfolio" 
-            className={`flex items-center gap-1.5 hover:text-emerald-700 transition-colors ${pathname === '/student/portfolio' ? 'text-emerald-700 font-semibold' : ''}`}
+            href="/sandbox" 
+            className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/sandbox' ? 'text-emerald-700 font-bold' : ''}`}
           >
-            <Sparkles className="w-4 h-4 text-amber-500" />
-            AI Resume
+            <Code2 className="w-3.5 h-3.5 text-teal-600" />
+            Live Code Lab
+          </Link>
+          <Link 
+            href="/student/interview" 
+            className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/student/interview' ? 'text-emerald-700 font-bold' : ''}`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            AI Interview
+          </Link>
+          <Link 
+            href="/student/portfolio" 
+            className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/student/portfolio' ? 'text-emerald-700 font-bold' : ''}`}
+          >
+            <Award className="w-3.5 h-3.5 text-emerald-600" />
+            Portfolio
           </Link>
           <Link 
             href="/recruiter" 
-            className={`flex items-center gap-1.5 hover:text-emerald-700 transition-colors ${pathname === '/recruiter' ? 'text-emerald-700 font-semibold' : ''}`}
+            className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/recruiter' ? 'text-emerald-700 font-bold' : ''}`}
           >
-            <Briefcase className="w-4 h-4 text-teal-600" />
-            CSR Recruiters
+            <Briefcase className="w-3.5 h-3.5 text-slate-500" />
+            Recruiters
           </Link>
           <Link 
             href="/donate" 
-            className={`flex items-center gap-1.5 hover:text-emerald-700 transition-colors ${pathname === '/donate' ? 'text-emerald-700 font-semibold' : ''}`}
+            className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/donate' ? 'text-emerald-700 font-bold' : ''}`}
           >
-            <Heart className="w-4 h-4 text-rose-500" />
+            <Heart className="w-3.5 h-3.5 text-rose-500" />
             {t('supportUsNav')}
-          </Link>
-          <Link 
-            href="/#status" 
-            className="hover:text-slate-900 transition-colors text-xs text-slate-500 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-md"
-          >
-            {t('apiStatusNav')}
           </Link>
         </nav>
 
