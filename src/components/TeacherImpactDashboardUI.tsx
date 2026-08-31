@@ -120,8 +120,14 @@ export default function TeacherImpactDashboardUI() {
             placeholder="Search student..."
             value={filterQuery}
             onChange={(e) => setFilterQuery(e.target.value)}
-            className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm shadow-xs focus:outline-none focus:border-emerald-500 w-64"
+            className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm shadow-xs focus:outline-none focus:border-emerald-500 w-56"
           />
+          <Link
+            href="/trainer/create-challenge"
+            className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-xs transition-colors whitespace-nowrap"
+          >
+            + Create Challenge
+          </Link>
         </div>
       </div>
 

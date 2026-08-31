@@ -391,4 +391,26 @@ CREATE POLICY "Allow public writes on attendance_logs" ON attendance_logs FOR AL
 CREATE POLICY "Allow public writes on parent_feedback" ON parent_feedback FOR ALL USING (true);
 CREATE POLICY "Allow public writes on capstone_submissions" ON capstone_submissions FOR ALL USING (true);
 
+-- 6. Interactive Coding Challenges Seeder Schema
+CREATE TABLE IF NOT EXISTS coding_challenges (
+    id VARCHAR(100) PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    level VARCHAR(50) DEFAULT 'beginner' CHECK (level IN ('beginner', 'intermediate', 'advanced')),
+    xp_reward INT DEFAULT 100,
+    sdg_alignment VARCHAR(255) DEFAULT 'SDG 4: Quality Education',
+    description TEXT NOT NULL,
+    analogy TEXT,
+    starter_html TEXT,
+    starter_css TEXT,
+    starter_js TEXT,
+    test_regex TEXT,
+    test_instructions TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE coding_challenges ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow public read on coding_challenges" ON coding_challenges FOR SELECT USING (true);
+CREATE POLICY "Allow public writes on coding_challenges" ON coding_challenges FOR ALL USING (true);
+
+
 
