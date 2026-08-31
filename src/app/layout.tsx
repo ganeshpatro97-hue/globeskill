@@ -33,6 +33,7 @@ export const metadata: Metadata = {
 };
 
 import OfflineStatusBanner from "@/components/OfflineStatusBanner";
+import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 
 export default function RootLayout({
   children,
@@ -42,6 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-screen bg-slate-50 text-slate-900 antialiased flex flex-col font-sans selection:bg-emerald-100 selection:text-emerald-900">
+        <ServiceWorkerRegister />
         <LanguageProvider>
           <AuthProvider>
             <Navbar />
@@ -57,5 +59,6 @@ export default function RootLayout({
     </html>
   );
 }
+
 
 

@@ -1,39 +1,24 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Wifi, WifiOff, RefreshCw, CheckCircle2 } from 'lucide-react';
-import { syncEngine, NetworkStatus } from '@/lib/offline/sync-engine';
+import { useOfflineSync } from '@/lib/offline-sync';
 
 export default function OfflineStatusBanner() {
-  const [networkStatus, setNetworkStatus] = useState<NetworkStatus>('online');
-  const [pendingCount, setPendingCount] = useState<number>(0);
-  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const { network, pendingCount, isSyncing, triggerSync } = useOfflineSync();
   const [justSynced, setJustSynced] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!syncEngine) return;
-
-    const unsubscribe = syncEngine.subscribe((status, pending) => {
-      setNetworkStatus(status);
-      setPendingCount(pending);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
   const handleManualSync = async () => {
-    if (!syncEngine || networkStatus === 'offline') return;
-    setIsSyncing(true);
-    const result = await syncEngine.flushSyncQueue();
-    setIsSyncing(false);
-    if (result.synced > 0) {
+    if (network === 'offline') return;
+    const result = await triggerSync();
+    if (result.syncedCount > 0) {
       setJustSynced(true);
       setTimeout(() => setJustSynced(false), 4000);
     }
   };
 
   // Only display if offline or if there are pending unsynced offline items or just synced
-  if (networkStatus === 'online' && pendingCount === 0 && !justSynced) {
+  if (network === 'online' && pendingCount === 0 && !justSynced) {
     return null;
   }
 
@@ -41,7 +26,7 @@ export default function OfflineStatusBanner() {
     <div className="fixed top-16 left-0 right-0 z-30 pointer-events-none flex justify-center px-4 animate-in slide-in-from-top-3 duration-300">
       <div className="pointer-events-auto bg-slate-900/95 backdrop-blur-md text-white border border-slate-700/80 rounded-2xl shadow-xl px-4 py-2 flex items-center gap-3 text-xs">
         
-        {networkStatus === 'offline' ? (
+        {network === 'offline' ? (
           <>
             <div className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></div>
             <div className="flex items-center gap-1.5 font-medium text-amber-300">
