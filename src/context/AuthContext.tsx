@@ -9,8 +9,8 @@ interface AuthContextType {
   profile: UserProfile | null;
   role: UserRole | null;
   loading: boolean;
-  login: (email: string, password?: string) => Promise<void>;
-  signup: (params: SignUpParams) => Promise<void>;
+  login: (email: string, password?: string) => Promise<UserProfile>;
+  signup: (params: SignUpParams) => Promise<UserProfile>;
   logout: () => void;
   switchDemoRole: (role: UserRole) => void;
   updateUser: (updates: Partial<UserProfile>) => Promise<void>;
@@ -73,23 +73,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const login = async (email: string, password?: string) => {
+  const login = async (email: string, password?: string): Promise<UserProfile> => {
     setLoading(true);
     try {
       const user = await loginUser(email, password);
       setProfile(user);
       localStorage.setItem('globeskill_active_user', JSON.stringify(user));
+      return user;
     } finally {
       setLoading(false);
     }
   };
 
-  const signup = async (params: SignUpParams) => {
+  const signup = async (params: SignUpParams): Promise<UserProfile> => {
     setLoading(true);
     try {
       const newUser = await signUpUser(params);
       setProfile(newUser);
       localStorage.setItem('globeskill_active_user', JSON.stringify(newUser));
+      return newUser;
     } finally {
       setLoading(false);
     }
@@ -140,3 +142,4 @@ export function useAuth() {
   }
   return context;
 }
+

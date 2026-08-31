@@ -66,8 +66,12 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      await login(email, password);
-      router.push('/student');
+      const loggedUser = await login(email, password);
+      const userRole = loggedUser?.user_role;
+      if (userRole === 'trainer') router.push('/trainer');
+      else if (userRole === 'donor') router.push('/donor');
+      else if (userRole === 'admin') router.push('/admin');
+      else router.push('/student');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Invalid credentials. Try using one of the demo accounts below.';
       setError(msg);

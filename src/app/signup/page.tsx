@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { UserRole } from '@/types/database';
-import { GraduationCap, BookOpen, Heart, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
+import { GraduationCap, BookOpen, Heart, ShieldCheck, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -36,6 +36,12 @@ export default function SignupPage() {
       title: 'Donor / Philanthropist',
       desc: 'Sponsor rural digital labs, fund youth AI scholarships, and receive 80G tax receipts.',
       icon: <Heart className="w-5 h-5 text-rose-500" />,
+    },
+    {
+      id: 'admin' as UserRole,
+      title: 'NGO Admin / Leader',
+      desc: 'Oversee all educational programs, manage trainers, view analytics, and platform governance.',
+      icon: <ShieldCheck className="w-5 h-5 text-blue-600" />,
     },
   ];
 
