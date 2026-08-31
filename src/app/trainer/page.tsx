@@ -1,11 +1,8 @@
 "use client";
 
-// GlobeSkill Phase 3: Trainer Dashboard with Course Management (Next.js, React, TypeScript, Tailwind CSS)
-// This file implements a fully responsive, state-managed dashboard where registered trainers
-// can manage their course roster, view student enrollments, and create new technical training tracks.
-
 import React, { useState } from 'react';
 import RoleGate from '@/components/RoleGate';
+import TeacherImpactDashboardUI from '@/components/TeacherImpactDashboardUI';
 
 // TypeScript Interfaces matching Phase 2 Database Schema
 export interface Student {
@@ -14,7 +11,7 @@ export interface Student {
   email: string;
   location: string;
   enrolled_date: string;
-  progress: number; // percentage (0-100)
+  progress: number;
 }
 
 export interface Course {
@@ -28,7 +25,6 @@ export interface Course {
   students: Student[];
 }
 
-// Pre-seeded Mock Courses representing real NGO programs (aligned with Edunet Foundation tracks)
 const INITIAL_COURSES: Course[] = [
   {
     id: 'course-1',
@@ -90,6 +86,7 @@ const INITIAL_COURSES: Course[] = [
 ];
 
 export default function TrainerDashboard() {
+  const [activeView, setActiveView] = useState<'impact' | 'courses'>('impact');
   const [courses, setCourses] = useState<Course[]>(INITIAL_COURSES);
   const [selectedCourse, setSelectedCourse] = useState<Course>(INITIAL_COURSES[0]);
   const [isAddingCourse, setIsAddingCourse] = useState(false);
@@ -103,7 +100,6 @@ export default function TrainerDashboard() {
   const [newSyllabusItem, setNewSyllabusItem] = useState('');
   const [newSyllabusList, setNewSyllabusList] = useState<string[]>([]);
 
-  // Add item to custom syllabus list during creation
   const handleAddSyllabusItem = () => {
     if (newSyllabusItem.trim()) {
       setNewSyllabusList([...newSyllabusList, newSyllabusItem.trim()]);
@@ -111,7 +107,6 @@ export default function TrainerDashboard() {
     }
   };
 
-  // Submit and save new course in states
   const handleCreateCourse = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitle.trim() || !newDescription.trim()) return;
@@ -132,20 +127,36 @@ export default function TrainerDashboard() {
     setSelectedCourse(newCourse);
     setIsAddingCourse(false);
     
-    // Clear form
     setNewTitle('');
     setNewDescription('');
     setNewDuration('6 Weeks');
     setNewLevel('Beginner');
     setNewSyllabusList([]);
 
-    // Trigger Success Toast
     setSuccessMessage('Course published and successfully database synced!');
     setTimeout(() => setSuccessMessage(null), 4000);
   };
 
   return (
     <RoleGate allowedRoles={['trainer', 'admin']} portalName="Trainer Management Hub">
+      {activeView === 'impact' ? (
+        <div>
+          {/* Top Switcher Bar */}
+          <div className="bg-slate-900 text-white px-6 py-2 flex items-center justify-between border-b border-slate-800 text-xs font-semibold">
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+              Trainer View Mode: <strong>Impact Analytics &amp; Offline Sync</strong>
+            </span>
+            <button
+              onClick={() => setActiveView('courses')}
+              className="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 rounded-lg transition-colors cursor-pointer text-white font-bold"
+            >
+              Switch to Curriculum Studio →
+            </button>
+          </div>
+          <TeacherImpactDashboardUI />
+        </div>
+      ) : (
       <div className="min-h-screen bg-slate-50 text-slate-800 font-sans">
         {/* Navigation Banner */}
         <div className="bg-slate-950 text-white shadow-md border-b border-slate-800">
@@ -156,14 +167,16 @@ export default function TrainerDashboard() {
               </div>
               <div>
                 <h1 className="text-xl font-bold tracking-tight">GlobeSkill</h1>
-                <p className="text-xs text-emerald-400">Trainer Management Hub</p>
+                <p className="text-xs text-emerald-400">Curriculum Studio &amp; Student Tracks</p>
               </div>
             </div>
             <div className="mt-4 sm:mt-0 flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-sm text-slate-300">
-                <span className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                <span>Trainer Portal: Live (Edunet Connected)</span>
-              </div>
+              <button
+                onClick={() => setActiveView('impact')}
+                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+              >
+                ← Back to Impact Dashboard
+              </button>
               <div className="h-8 w-8 bg-emerald-700 hover:bg-emerald-600 transition text-white font-semibold flex items-center justify-center rounded-full text-sm shadow cursor-pointer">
                 T1
               </div>
@@ -176,7 +189,7 @@ export default function TrainerDashboard() {
           
           {/* Success Alert Banner */}
           {successMessage && (
-            <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl flex items-center space-x-3 shadow-sm animate-in fade-in">
+            <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl flex items-center space-x-3 shadow-xs animate-in fade-in">
               <span className="text-lg">✔️</span>
               <span className="font-semibold text-sm">{successMessage}</span>
             </div>
@@ -475,6 +488,7 @@ export default function TrainerDashboard() {
           </div>
         </main>
       </div>
+      )}
     </RoleGate>
   );
 }

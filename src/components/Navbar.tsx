@@ -91,6 +91,13 @@ export default function Navbar() {
             Sandbox
           </Link>
           <Link 
+            href="/student/challenges" 
+            className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/student/challenges' ? 'text-emerald-700 font-bold' : ''}`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            Quests
+          </Link>
+          <Link 
             href="/student/leaderboard" 
             className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/student/leaderboard' ? 'text-emerald-700 font-bold' : ''}`}
           >
