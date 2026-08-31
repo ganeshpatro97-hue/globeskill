@@ -247,3 +247,69 @@ VALUES
     98
   )
 ON CONFLICT (id) DO NOTHING;
+
+-- ==========================================
+-- 6. Phase 8: Vocational Matchmaking & Portfolio Schema
+-- ==========================================
+
+-- 1. Recruiters Table (CSR Aligned partners e.g., IBM SkillsBuild, TechMahindra Foundation, Cisco Academy)
+CREATE TABLE IF NOT EXISTS recruiters (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    company_name VARCHAR(255) NOT NULL,
+    website_url VARCHAR(255),
+    contact_email VARCHAR(255) NOT NULL,
+    verified_ngo_partner BOOLEAN DEFAULT TRUE,
+    csr_sector VARCHAR(255) DEFAULT 'SDG 8: Decent Work and Economic Growth',
+    registered_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Jobs Registry (Open Entry-Level Vocations, Internships, and Technical Trainee tracks)
+CREATE TABLE IF NOT EXISTS jobs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    recruiter_id UUID REFERENCES recruiters(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    required_skills VARCHAR(255)[] NOT NULL,
+    employment_type VARCHAR(100) DEFAULT 'Internship' CHECK (employment_type IN ('Internship', 'Full-time', 'Part-time', 'Apprenticeship', 'CSR Trainee')),
+    stipend_range VARCHAR(100) DEFAULT '₹12,000 - ₹18,000 / month',
+    location VARCHAR(255) DEFAULT 'Remote',
+    openings_count INT DEFAULT 1,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Student Portfolio compilations
+CREATE TABLE IF NOT EXISTS student_portfolios (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+    compiled_resume JSONB NOT NULL,
+    search_tags VARCHAR(255)[] DEFAULT '{}',
+    match_score INT DEFAULT 90,
+    last_updated TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_user_portfolio UNIQUE(user_id)
+);
+
+-- 4. Job Applications & Matching Score Logs
+CREATE TABLE IF NOT EXISTS job_applications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+    job_id UUID REFERENCES jobs(id) ON DELETE CASCADE,
+    matching_score INT DEFAULT 0 CHECK (matching_score >= 0 AND matching_score <= 100),
+    matching_feedback JSONB,
+    status VARCHAR(100) DEFAULT 'pending' CHECK (status IN ('pending', 'under_review', 'interview_scheduled', 'offered', 'rejected')),
+    applied_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_user_job UNIQUE(user_id, job_id)
+);
+
+-- Enable Row Level Security (RLS) policies
+ALTER TABLE recruiters ENABLE ROW LEVEL SECURITY;
+ALTER TABLE jobs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE student_portfolios ENABLE ROW LEVEL SECURITY;
+ALTER TABLE job_applications ENABLE ROW LEVEL SECURITY;
+
+-- Policy: Anyone logged in can read jobs and recruiters
+CREATE POLICY "Allow public read on jobs" ON jobs FOR SELECT USING (true);
+CREATE POLICY "Allow public read on recruiters" ON recruiters FOR SELECT USING (true);
+CREATE POLICY "Allow authenticated reads on student_portfolios" ON student_portfolios FOR SELECT USING (true);
+CREATE POLICY "Students handle own portfolios" ON student_portfolios FOR ALL USING (true);
+CREATE POLICY "Students handle own applications" ON job_applications FOR ALL USING (true);
+
