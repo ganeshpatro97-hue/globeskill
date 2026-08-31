@@ -75,7 +75,7 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-4 text-xs font-semibold text-slate-600">
+        <nav className="hidden md:flex items-center gap-3.5 text-xs font-semibold text-slate-600">
           <Link 
             href="/courses" 
             className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/courses' ? 'text-emerald-700 font-bold' : ''}`}
@@ -88,28 +88,35 @@ export default function Navbar() {
             className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/sandbox' ? 'text-emerald-700 font-bold' : ''}`}
           >
             <Code2 className="w-3.5 h-3.5 text-teal-600" />
-            Live Code Lab
+            Sandbox
+          </Link>
+          <Link 
+            href="/student/leaderboard" 
+            className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/student/leaderboard' ? 'text-emerald-700 font-bold' : ''}`}
+          >
+            <Award className="w-3.5 h-3.5 text-amber-500" />
+            Badges
           </Link>
           <Link 
             href="/student/interview" 
             className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/student/interview' ? 'text-emerald-700 font-bold' : ''}`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            AI Interview
+            <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+            Interview
+          </Link>
+          <Link 
+            href="/community" 
+            className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/community' ? 'text-emerald-700 font-bold' : ''}`}
+          >
+            <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
+            Community
           </Link>
           <Link 
             href="/student/portfolio" 
             className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/student/portfolio' ? 'text-emerald-700 font-bold' : ''}`}
           >
-            <Award className="w-3.5 h-3.5 text-emerald-600" />
-            Portfolio
-          </Link>
-          <Link 
-            href="/recruiter" 
-            className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/recruiter' ? 'text-emerald-700 font-bold' : ''}`}
-          >
             <Briefcase className="w-3.5 h-3.5 text-slate-500" />
-            Recruiters
+            Portfolio
           </Link>
           <Link 
             href="/donate" 

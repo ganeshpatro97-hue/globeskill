@@ -313,3 +313,82 @@ CREATE POLICY "Allow authenticated reads on student_portfolios" ON student_portf
 CREATE POLICY "Students handle own portfolios" ON student_portfolios FOR ALL USING (true);
 CREATE POLICY "Students handle own applications" ON job_applications FOR ALL USING (true);
 
+-- ==========================================
+-- 7. Phase 9: Community & Gamification Engine Schema
+-- ==========================================
+
+-- 1. Community Attendance Logs
+CREATE TABLE IF NOT EXISTS attendance_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+    trainer_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
+    center_name VARCHAR(255) DEFAULT 'Rural Digital Hub - Center 1',
+    session_date DATE DEFAULT CURRENT_DATE,
+    status VARCHAR(50) DEFAULT 'present' CHECK (status IN ('present', 'absent', 'late', 'excused')),
+    notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Localized Parent Qualitative Feedback
+CREATE TABLE IF NOT EXISTS parent_feedback (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+    parent_name VARCHAR(255) NOT NULL,
+    parent_phone VARCHAR(50),
+    language VARCHAR(10) DEFAULT 'hi',
+    feedback_text TEXT NOT NULL,
+    confidence_growth_rating INT DEFAULT 5 CHECK (confidence_growth_rating >= 1 AND confidence_growth_rating <= 5),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Capstone Projects & Hackathon Submissions
+CREATE TABLE IF NOT EXISTS capstone_submissions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+    project_title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    github_url VARCHAR(500),
+    live_demo_url VARCHAR(500),
+    sdg_target VARCHAR(255) DEFAULT 'SDG 8: Decent Work and Economic Growth',
+    grade_score INT DEFAULT 95 CHECK (grade_score >= 0 AND grade_score <= 100),
+    ai_evaluation JSONB,
+    badge_awarded VARCHAR(255) DEFAULT 'UN SDG Tech Innovator',
+    status VARCHAR(50) DEFAULT 'graded' CHECK (status IN ('submitted', 'graded', 'featured')),
+    submitted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 4. User Gamification & XP Progress
+CREATE TABLE IF NOT EXISTS user_gamification (
+    user_id UUID PRIMARY KEY REFERENCES profiles(id) ON DELETE CASCADE,
+    xp_points INT DEFAULT 150,
+    current_level INT DEFAULT 1,
+    streak_days INT DEFAULT 1,
+    last_active_date DATE DEFAULT CURRENT_DATE
+);
+
+-- 5. Student SDG Badges
+CREATE TABLE IF NOT EXISTS student_badges (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+    badge_key VARCHAR(100) NOT NULL,
+    badge_name VARCHAR(255) NOT NULL,
+    badge_icon VARCHAR(50) DEFAULT '🏆',
+    sdg_alignment VARCHAR(255) DEFAULT 'SDG 4: Quality Education',
+    unlocked_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Enable RLS
+ALTER TABLE attendance_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE parent_feedback ENABLE ROW LEVEL SECURITY;
+ALTER TABLE capstone_submissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_gamification ENABLE ROW LEVEL SECURITY;
+ALTER TABLE student_badges ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read on user_gamification" ON user_gamification FOR SELECT USING (true);
+CREATE POLICY "Allow public read on student_badges" ON student_badges FOR SELECT USING (true);
+CREATE POLICY "Allow public read on capstone_submissions" ON capstone_submissions FOR SELECT USING (true);
+CREATE POLICY "Allow public writes on attendance_logs" ON attendance_logs FOR ALL USING (true);
+CREATE POLICY "Allow public writes on parent_feedback" ON parent_feedback FOR ALL USING (true);
+CREATE POLICY "Allow public writes on capstone_submissions" ON capstone_submissions FOR ALL USING (true);
+
+
