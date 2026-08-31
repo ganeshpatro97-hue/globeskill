@@ -1,2 +1,1 @@
-export { default } from './AiLearningAssistant';
-export * from './AiLearningAssistant';
+export { default } from '@/components/AiLearningAssistant';
