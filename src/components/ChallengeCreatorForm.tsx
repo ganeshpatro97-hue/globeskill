@@ -590,7 +590,7 @@ export default function ChallengeCreatorForm() {
                     {formData.analogy && (
                       <div className="p-4 bg-amber-50/50 border border-amber-200/50 rounded-xl">
                         <h5 className="text-xs font-bold text-amber-800 uppercase flex items-center gap-1.5 mb-1">
-                          💡 Real-World Analogy (समझने के लिए)
+                          💡 Real-World Analogy
                         </h5>
                         <p className="text-xs text-amber-900 leading-relaxed italic">{formData.analogy}</p>
                       </div>

@@ -96,7 +96,7 @@ export default function AiLearningAssistant() {
       const errorMessage: AiChatMessage = {
         id: `err_${messageIdCounter.current}`,
         sender: 'assistant',
-        text: "Oops! I ran into a tiny hiccup. But remember: in coding, mistakes are just learning opportunities! Try asking again.",
+        text: t('aiErrorFallback', "Oops! I ran into a tiny hiccup. But remember: in coding, mistakes are just learning opportunities! Try asking again."),
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages((prev) => [...prev, errorMessage]);
@@ -131,7 +131,7 @@ export default function AiLearningAssistant() {
               <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-200"></span>
             </span>
             <Bot className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-            <span className="text-xs font-bold tracking-wide">Ask AI Mentor</span>
+            <span className="text-xs font-bold tracking-wide">{t('askMentor')}</span>
           </button>
         </div>
       )}
@@ -224,7 +224,7 @@ export default function AiLearningAssistant() {
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-bounce"></div>
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-bounce [animation-delay:0.2s]"></div>
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-bounce [animation-delay:0.4s]"></div>
-                  <span className="text-[11px] text-slate-500 font-medium ml-1">Sparky is thinking...</span>
+                  <span className="text-[11px] text-slate-500 font-medium ml-1">{t('Sparky is thinking...', 'Sparky is thinking...')}</span>
                 </div>
               </div>
             )}

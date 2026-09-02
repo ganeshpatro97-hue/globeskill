@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Wifi, WifiOff, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { WifiOff, RefreshCw, CheckCircle2 } from 'lucide-react';
 import { useOfflineSync } from '@/lib/offline-sync';
+import { useTranslation } from '@/context/LanguageContext';
 
 export default function OfflineStatusBanner() {
   const { network, pendingCount, isSyncing, triggerSync } = useOfflineSync();
+  const { t } = useTranslation();
   const [justSynced, setJustSynced] = useState<boolean>(false);
 
   const handleManualSync = async () => {
@@ -31,24 +33,24 @@ export default function OfflineStatusBanner() {
             <div className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></div>
             <div className="flex items-center gap-1.5 font-medium text-amber-300">
               <WifiOff className="w-3.5 h-3.5" />
-              <span>Offline Mode Active (बिना इंटरनेट अध्ययन)</span>
+              <span>{t('offlineModeActive')}</span>
             </div>
             <span className="text-slate-400 text-[11px]">
-              Lessons cached in IndexedDB. {pendingCount > 0 && `${pendingCount} updates queued for auto-sync.`}
+              {t('lessonsCached')} {pendingCount > 0 && `(${pendingCount} updates queued)`}
             </span>
           </>
         ) : justSynced ? (
           <>
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
             <span className="font-semibold text-emerald-300">
-              Offline progress successfully synchronized with GlobeSkill cloud!
+              {t('syncedSuccess')}
             </span>
           </>
         ) : (
           <>
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
             <span className="text-slate-300 font-medium">
-              Back online! {pendingCount} offline updates ready to sync.
+              {t('backOnline')} {pendingCount > 0 && `(${pendingCount} queued)`}
             </span>
             <button
               onClick={handleManualSync}
@@ -56,7 +58,7 @@ export default function OfflineStatusBanner() {
               className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-colors flex items-center gap-1 text-[11px] cursor-pointer"
             >
               <RefreshCw className={`w-3 h-3 ${isSyncing ? 'animate-spin' : ''}`} />
-              {isSyncing ? 'Syncing...' : 'Sync Now'}
+              {isSyncing ? t('syncing') : t('syncNow')}
             </button>
           </>
         )}

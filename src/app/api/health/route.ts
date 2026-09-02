@@ -1,32 +1,36 @@
-import { NextResponse } from "next/server";
-import { getPlatformStatus } from "@/lib/services/platform.service";
+import { NextResponse } from 'next/server';
+import { getPlatformStatus } from '@/lib/status-checker';
+
+export const dynamic = 'force-dynamic'; // Prevent Vercel compilation caching
 
 /**
  * GET /api/health
  * 
- * Thin API controller layer:
- * Validates request, delegates execution to business logic layer, and formats the HTTP response.
+ * Serverless API Route Handler:
+ * Strips edge-network caching headers, checks platform downstream services,
+ * and responds with real-time health metrics.
  */
 export async function GET() {
   try {
-    const statusData = await getPlatformStatus();
-    return NextResponse.json(statusData, { status: 200 });
+    const healthReport = await getPlatformStatus();
+
+    // Set response headers to prevent CDNs, proxies, and service workers from caching stale results
+    return NextResponse.json(healthReport, {
+      status: 200,
+      headers: {
+        'Cache-Control': 'no-store, max-age=0, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      },
+    });
   } catch (error) {
-    console.error("Health check error:", error);
+    console.error('Health check API error:', error);
     return NextResponse.json(
       {
-        status: "down",
-        project: "GlobeSkill",
-        message: "Failed to fetch platform status",
-        platformStatus: "Offline",
-        currentPhase: "Unknown",
+        status: 'error',
+        database: 'disconnected',
+        message: 'Platform status engine failed',
         timestamp: new Date().toISOString(),
-        version: "1.0.0",
-        details: {
-          mission: "Technology & AI Education for Every Child",
-          targetAudience: "Underserved learners",
-          environment: process.env.NODE_ENV || "development",
-        },
       },
       { status: 500 }
     );

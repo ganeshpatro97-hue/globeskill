@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { PlatformStatus } from "@/types/platform";
+import { useTranslation } from "@/context/LanguageContext";
 import { 
   GraduationCap, 
   BookOpen, 
@@ -11,8 +12,11 @@ import {
   ArrowRight, 
   CheckCircle2
 } from "lucide-react";
+import SystemStatusIndicator from "@/components/SystemStatus";
 
 export default function Home() {
+  const { t } = useTranslation();
+
   // Exploration feedback state
   const [exploreMessage, setExploreMessage] = useState<string | null>(null);
 
@@ -87,7 +91,7 @@ export default function Home() {
   };
 
   const handleExploreClick = () => {
-    setExploreMessage("GlobeSkill platform is successfully running. Welcome to the future of AI & Digital Education!");
+    setExploreMessage(t('exploreSuccessMsg'));
   };
 
   return (
@@ -99,24 +103,24 @@ export default function Home() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             
             {/* Top Tag & Badge */}
-            <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-semibold px-3.5 py-1.5 rounded-full mb-6">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" aria-hidden="true"></span>
-              Global Education &amp; Equal Opportunity Initiative
+            <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-semibold px-3.5 py-1.5 rounded-full mb-6 shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true"></span>
+              {t('heroBadge')}
             </div>
 
             {/* Title */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              GlobeSkill
+              {t('brand')}
             </h1>
 
             {/* Tagline */}
             <p className="mt-4 text-xl sm:text-2xl font-semibold text-emerald-700 max-w-2xl mx-auto leading-snug">
-              Technology &amp; AI Education for Every Child
+              {t('heroTagline')}
             </p>
 
             {/* Core Description Text */}
             <p className="mt-6 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-              GlobeSkill is an initiative to help underserved learners gain access to digital skills, technology education and AI-enabled career opportunities.
+              {t('heroDescription')}
             </p>
 
             {/* Primary Action Buttons */}
@@ -127,7 +131,7 @@ export default function Home() {
                 className="w-full sm:w-auto px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-sm font-bold rounded-xl shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 cursor-pointer"
                 aria-label="Explore GlobeSkill Platform"
               >
-                Explore GlobeSkill
+                {t('exploreBtn')}
               </button>
 
               <Link
@@ -135,7 +139,7 @@ export default function Home() {
                 className="w-full sm:w-auto px-7 py-3.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 text-sm font-bold rounded-xl shadow-2xs transition-all flex items-center justify-center gap-2"
               >
                 <BookOpen className="w-4 h-4 text-emerald-600" />
-                Browse Course Catalog
+                {t('browseCoursesBtn')}
               </Link>
             </div>
 
@@ -144,7 +148,7 @@ export default function Home() {
               <div
                 role="status"
                 aria-live="polite"
-                className="mt-6 max-w-md mx-auto p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-left text-xs text-emerald-900 shadow-sm flex items-start gap-3"
+                className="mt-6 max-w-md mx-auto p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-left text-xs text-emerald-900 shadow-sm flex items-start gap-3 animate-in fade-in zoom-in-95"
               >
                 <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                 <div className="flex-1">
@@ -155,7 +159,7 @@ export default function Home() {
                   className="text-emerald-700 hover:text-emerald-900 text-xs font-semibold underline ml-2 cursor-pointer"
                   aria-label="Dismiss message"
                 >
-                  Dismiss
+                  {t('dismissBtn')}
                 </button>
               </div>
             )}
@@ -168,13 +172,13 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-12">
               <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
-                Interactive Multi-Role Architecture
+                {t('roleHubBadge')}
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3">
-                Built for Every Stakeholder
+                {t('roleHubTitle')}
               </h2>
               <p className="mt-2 text-slate-600 text-xs sm:text-sm">
-                Seamless role-based portals for students, educators, philanthropists, and NGO administrators.
+                {t('roleHubSubtitle')}
               </p>
             </div>
 
@@ -186,16 +190,16 @@ export default function Home() {
                   <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold mb-4 group-hover:scale-110 transition-transform">
                     <GraduationCap className="w-6 h-6" />
                   </div>
-                  <h3 className="text-base font-bold text-slate-900 mb-1">Student Portal</h3>
+                  <h3 className="text-base font-bold text-slate-900 mb-1">{t('studentPortalTitle')}</h3>
                   <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                    Learn AI, Python, &amp; Web Dev with interactive milestone tracking and 24/7 AI mentor guidance.
+                    {t('studentPortalDesc')}
                   </p>
                 </div>
                 <Link
                   href="/student"
                   className="text-xs font-bold text-emerald-700 flex items-center gap-1 group-hover:gap-2 transition-all"
                 >
-                  Open Learning Portal <ArrowRight className="w-3.5 h-3.5" />
+                  {t('openStudentPortal')} <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
 
@@ -205,16 +209,16 @@ export default function Home() {
                   <div className="w-12 h-12 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold mb-4 group-hover:scale-110 transition-transform">
                     <BookOpen className="w-6 h-6" />
                   </div>
-                  <h3 className="text-base font-bold text-slate-900 mb-1">Trainer Studio</h3>
+                  <h3 className="text-base font-bold text-slate-900 mb-1">{t('trainerStudioTitle')}</h3>
                   <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                    Author technical syllabi, upload course PDF materials, and inspect live student rosters.
+                    {t('trainerStudioDesc')}
                   </p>
                 </div>
                 <Link
                   href="/trainer"
                   className="text-xs font-bold text-teal-700 flex items-center gap-1 group-hover:gap-2 transition-all"
                 >
-                  Launch Trainer Studio <ArrowRight className="w-3.5 h-3.5" />
+                  {t('launchTrainerStudio')} <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
 
@@ -224,16 +228,16 @@ export default function Home() {
                   <div className="w-12 h-12 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center font-bold mb-4 group-hover:scale-110 transition-transform">
                     <Heart className="w-6 h-6 fill-rose-500" />
                   </div>
-                  <h3 className="text-base font-bold text-slate-900 mb-1">Support &amp; Donor Hub</h3>
+                  <h3 className="text-base font-bold text-slate-900 mb-1">{t('donorHubTitle')}</h3>
                   <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                    Sponsor rural student cohorts, track funding milestones, and download 80G tax receipts.
+                    {t('donorHubDesc')}
                   </p>
                 </div>
                 <Link
                   href="/donate"
                   className="text-xs font-bold text-rose-700 flex items-center gap-1 group-hover:gap-2 transition-all"
                 >
-                  Donate &amp; View Impact <ArrowRight className="w-3.5 h-3.5" />
+                  {t('donateImpact')} <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
 
@@ -243,16 +247,16 @@ export default function Home() {
                   <div className="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold mb-4 group-hover:scale-110 transition-transform">
                     <ShieldCheck className="w-6 h-6" />
                   </div>
-                  <h3 className="text-base font-bold text-slate-900 mb-1">NGO Admin Center</h3>
+                  <h3 className="text-base font-bold text-slate-900 mb-1">{t('adminCenterTitle')}</h3>
                   <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                    Real-time enrollment velocity analytics, user role administration, and CSV compliance export.
+                    {t('adminCenterDesc')}
                   </p>
                 </div>
                 <Link
                   href="/admin"
                   className="text-xs font-bold text-indigo-700 flex items-center gap-1 group-hover:gap-2 transition-all"
                 >
-                  Admin Governance <ArrowRight className="w-3.5 h-3.5" />
+                  {t('adminGovernance')} <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
 
@@ -265,10 +269,10 @@ export default function Home() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-12">
               <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
-                Empowering the Next Generation of Technologists
+                {t('pillarsTitle')}
               </h2>
               <p className="mt-3 text-slate-600 text-xs sm:text-sm">
-                Building inclusive bridges from basic digital literacy to applied artificial intelligence competencies.
+                {t('pillarsSubtitle')}
               </p>
             </div>
 
@@ -278,9 +282,9 @@ export default function Home() {
                 <div className="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-base mb-4">
                   01
                 </div>
-                <h3 className="text-base font-bold text-slate-900 mb-2">Digital Literacy</h3>
+                <h3 className="text-base font-bold text-slate-900 mb-2">{t('pillar1Title')}</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Equipping children and youth in underserved communities with essential computing foundations and safe online practices.
+                  {t('pillar1Desc')}
                 </p>
               </div>
 
@@ -289,9 +293,9 @@ export default function Home() {
                 <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-base mb-4">
                   02
                 </div>
-                <h3 className="text-base font-bold text-slate-900 mb-2">Applied AI Curriculum</h3>
+                <h3 className="text-base font-bold text-slate-900 mb-2">{t('pillar2Title')}</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Interactive, age-appropriate AI and machine learning concepts designed to inspire curiosity and critical thinking.
+                  {t('pillar2Desc')}
                 </p>
               </div>
 
@@ -300,9 +304,9 @@ export default function Home() {
                 <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-base mb-4">
                   03
                 </div>
-                <h3 className="text-base font-bold text-slate-900 mb-2">Career &amp; Mentorship</h3>
+                <h3 className="text-base font-bold text-slate-900 mb-2">{t('pillar3Title')}</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Connecting passionate students with tech mentors, hands-on project workshops, and future employment pathways.
+                  {t('pillar3Desc')}
                 </p>
               </div>
             </div>
@@ -317,7 +321,7 @@ export default function Home() {
               {/* Card Header */}
               <div className="px-6 py-4 bg-slate-100/70 border-b border-slate-200 flex items-center justify-between">
                 <div>
-                  <h2 className="text-base font-bold text-slate-900">System Status</h2>
+                  <h2 className="text-base font-bold text-slate-900">{t('systemStatus')}</h2>
                   <p className="text-xs text-slate-500">Live health verification from backend API (<code className="font-mono text-slate-700">/api/health</code>)</p>
                 </div>
                 <button
@@ -326,7 +330,7 @@ export default function Home() {
                   className="text-xs font-semibold px-3 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-md shadow-2xs transition-colors disabled:opacity-50 cursor-pointer"
                   aria-label="Refresh system status"
                 >
-                  {statusLoading ? "Checking..." : "Refresh"}
+                  {statusLoading ? t('statusLoading') : "Refresh"}
                 </button>
               </div>
 
@@ -337,7 +341,7 @@ export default function Home() {
                 {statusLoading && (
                   <div className="flex items-center gap-3 py-6 justify-center text-slate-600 text-xs" role="status">
                     <div className="w-4 h-4 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
-                    <span>Checking platform connection...</span>
+                    <span>{t('statusLoading')}</span>
                   </div>
                 )}
 
@@ -345,7 +349,7 @@ export default function Home() {
                 {!statusLoading && statusError && (
                   <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-xs text-red-900 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <div>
-                      <p className="font-semibold">Platform Status: Offline / Error</p>
+                      <p className="font-semibold">{t('statusOffline')}</p>
                       <p className="text-[11px] text-red-700 mt-1">{statusError}</p>
                     </div>
                     <button
@@ -360,21 +364,8 @@ export default function Home() {
                 {/* 3. Success State */}
                 {!statusLoading && !statusError && statusData && (
                   <div className="space-y-4">
-                    {/* Main Status Pill */}
-                    <div className="flex items-center justify-between flex-wrap gap-2 p-3.5 bg-emerald-50/80 border border-emerald-200 rounded-xl">
-                      <div className="flex items-center gap-2.5">
-                        <span className="relative flex h-3 w-3">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-600"></span>
-                        </span>
-                        <span className="font-bold text-emerald-950 text-sm sm:text-base">
-                          Platform Status: {statusData.platformStatus}
-                        </span>
-                      </div>
-                      <span className="text-xs font-mono text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
-                        HTTP 200 OK
-                      </span>
-                    </div>
+                    {/* Live SystemStatus Component */}
+                    <SystemStatusIndicator />
 
                     {/* Metadata Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-600 pt-1">

@@ -1,5 +1,5 @@
 /**
- * GlobeSkill Phase 7: Offline-First Synchronization & PWA Caching Engine (बिना इंटरनेट के शिक्षा)
+ * GlobeSkill Phase 7: Offline-First Synchronization & PWA Caching Engine
  * Designed for rural / low-connectivity learning centers.
  * 
  * Features:
@@ -382,7 +382,7 @@ export function useOfflineSync() {
 // 5. Service Worker PWA Helper
 // ==========================================
 export function registerServiceWorker(): void {
-  if (typeof window !== 'undefined' && 'serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+  if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker
         .register('/sw.js')

@@ -4,12 +4,14 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useTranslation } from '@/context/LanguageContext';
 import { UserRole } from '@/types/database';
 import { GraduationCap, BookOpen, Heart, ShieldCheck, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function SignupPage() {
   const router = useRouter();
   const { signup } = useAuth();
+  const { t } = useTranslation();
 
   const [selectedRole, setSelectedRole] = useState<UserRole>('student');
   const [fullName, setFullName] = useState('');
@@ -21,26 +23,26 @@ export default function SignupPage() {
   const roles = [
     {
       id: 'student' as UserRole,
-      title: 'Student Learner',
-      desc: 'Access interactive AI courses, track your learning journey, and chat with AI mentors.',
+      title: t('roleStudent'),
+      desc: t('Access interactive AI courses, track your learning journey, and chat with AI mentors.', 'Access interactive AI courses, track your learning journey, and chat with AI mentors.'),
       icon: <GraduationCap className="w-5 h-5 text-emerald-600" />,
     },
     {
       id: 'trainer' as UserRole,
-      title: 'Educator / Trainer',
-      desc: 'Build tech curriculum, upload resources, lead live cohorts, and mentor students.',
+      title: t('roleTrainer'),
+      desc: t('Build tech curriculum, upload resources, lead live cohorts, and mentor students.', 'Build tech curriculum, upload resources, lead live cohorts, and mentor students.'),
       icon: <BookOpen className="w-5 h-5 text-teal-600" />,
     },
     {
       id: 'donor' as UserRole,
-      title: 'Donor / Philanthropist',
-      desc: 'Sponsor rural digital labs, fund youth AI scholarships, and receive 80G tax receipts.',
+      title: t('roleDonor'),
+      desc: t('Sponsor rural digital labs, fund youth AI scholarships, and receive 80G tax receipts.', 'Sponsor rural digital labs, fund youth AI scholarships, and receive 80G tax receipts.'),
       icon: <Heart className="w-5 h-5 text-rose-500" />,
     },
     {
       id: 'admin' as UserRole,
-      title: 'NGO Admin / Leader',
-      desc: 'Oversee all educational programs, manage trainers, view analytics, and platform governance.',
+      title: t('roleAdmin'),
+      desc: t('Oversee all educational programs, manage trainers, view analytics, and platform governance.', 'Oversee all educational programs, manage trainers, view analytics, and platform governance.'),
       icon: <ShieldCheck className="w-5 h-5 text-blue-600" />,
     },
   ];
@@ -80,9 +82,9 @@ export default function SignupPage() {
           <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-black text-xl mx-auto mb-3 shadow-xs">
             G
           </div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Join GlobeSkill</h1>
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">{t('signupBtn')}</h1>
           <p className="mt-2 text-xs text-slate-600">
-            Create an account to start your technology &amp; AI learning journey.
+            {t('Create an account to start your technology & AI learning journey.', 'Create an account to start your technology & AI learning journey.')}
           </p>
         </div>
 
@@ -97,7 +99,7 @@ export default function SignupPage() {
           {/* Role Selection */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
-              Select Your Role
+              {t('selectRoleLabel')}
             </label>
             <div className="space-y-2">
               {roles.map((r) => (
@@ -129,7 +131,7 @@ export default function SignupPage() {
 
           {/* Full Name */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Full Name</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">{t('fullNameLabel')}</label>
             <input
               type="text"
               required
@@ -142,7 +144,7 @@ export default function SignupPage() {
 
           {/* Email */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">{t('emailLabel')}</label>
             <input
               type="email"
               required
@@ -155,7 +157,7 @@ export default function SignupPage() {
 
           {/* Password */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">{t('passwordLabel')}</label>
             <input
               type="password"
               value={password}
@@ -171,15 +173,15 @@ export default function SignupPage() {
             disabled={loading}
             className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
           >
-            {loading ? 'Creating Account...' : 'Continue to Profile Setup'}
+            {loading ? t('Creating Account...', 'Creating Account...') : t('signupBtn')}
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
 
         <div className="text-center pt-2 text-xs text-slate-600">
-          Already have an account?{' '}
+          {t('alreadyHaveAccount')}{' '}
           <Link href="/login" className="text-emerald-700 font-bold hover:underline">
-            Log In
+            {t('loginBtn')}
           </Link>
         </div>
 

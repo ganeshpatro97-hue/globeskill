@@ -7,6 +7,7 @@ import { Course } from '@/types/database';
 import { getAllCourses } from '@/lib/services/course.service';
 import { enrollStudentInCourse } from '@/lib/services/enrollment.service';
 import { useAuth } from '@/context/AuthContext';
+import { useTranslation } from '@/context/LanguageContext';
 import { 
   Compass, 
   Search, 
@@ -22,6 +23,7 @@ import {
 export default function CourseCatalogPage() {
   const router = useRouter();
   const { profile } = useAuth();
+  const { t } = useTranslation();
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedLevel, setSelectedLevel] = useState<string>('All');
@@ -71,13 +73,13 @@ export default function CourseCatalogPage() {
       <div className="bg-gradient-to-r from-emerald-800 via-teal-800 to-slate-900 rounded-3xl p-8 sm:p-12 text-white shadow-md mb-10 relative overflow-hidden">
         <div className="max-w-2xl relative z-10">
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full text-xs font-semibold text-emerald-200 mb-4">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-300" /> Free Open NGO Tech Curriculum
+            <Sparkles className="w-3.5 h-3.5 text-emerald-300" /> {t('catalogBadge')}
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-            Skill Development Programs &amp; AI Courses
+            {t('catalogTitle')}
           </h1>
           <p className="mt-3 text-sm sm:text-base text-slate-200 leading-relaxed">
-            High-impact technical courses designed for young minds and underserved learners. From foundational digital literacy to applied machine learning models.
+            {t('catalogSubtitle')}
           </p>
         </div>
       </div>
@@ -91,7 +93,7 @@ export default function CourseCatalogPage() {
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search courses, skills, or topics..."
+              placeholder={t('searchCoursesPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl pl-9.5 pr-4 py-2.5 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -111,7 +113,7 @@ export default function CourseCatalogPage() {
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
-                {cat}
+                {cat === 'All' ? t('allCategories') : t(cat)}
               </button>
             ))}
           </div>
@@ -120,7 +122,7 @@ export default function CourseCatalogPage() {
 
         {/* Skill Level Filter */}
         <div className="flex items-center gap-2 pt-2 border-t border-slate-100 text-xs text-slate-600">
-          <span className="font-semibold text-slate-500">Skill Level:</span>
+          <span className="font-semibold text-slate-500">{t('filterLevel')}:</span>
           {levels.map((lvl) => (
             <button
               key={lvl}
@@ -131,7 +133,7 @@ export default function CourseCatalogPage() {
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              {lvl}
+              {lvl === 'All' ? t('allLevels') : t(lvl)}
             </button>
           ))}
         </div>
@@ -141,8 +143,8 @@ export default function CourseCatalogPage() {
       {filteredCourses.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-2xl border border-slate-200">
           <Compass className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-          <h3 className="text-base font-bold text-slate-800">No courses match your filter</h3>
-          <p className="text-xs text-slate-500 mt-1">Try selecting a different category or search term.</p>
+          <h3 className="text-base font-bold text-slate-800">{t('No courses match your filter')}</h3>
+          <p className="text-xs text-slate-500 mt-1">{t('Try selecting a different category or search term.')}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
@@ -160,37 +162,37 @@ export default function CourseCatalogPage() {
                   {/* Top Badges */}
                   <div className="flex items-center justify-between gap-2 mb-3">
                     <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
-                      {course.category}
+                      {t(course.category)}
                     </span>
                     <span className="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
                       <Award className="w-3.5 h-3.5 text-amber-500" />
-                      {course.skill_level}
+                      {t(course.skill_level)}
                     </span>
                   </div>
 
                   {/* Title & Tagline */}
                   <h3 className="text-lg font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
-                    <Link href={`/courses/${course.id}`}>{course.title}</Link>
+                    <Link href={`/courses/${course.id}`}>{t(course.title)}</Link>
                   </h3>
                   <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                    {course.tagline}
+                    {t(course.tagline)}
                   </p>
 
                   {/* Syllabus chapters highlights */}
                   <div className="mt-4 pt-3 border-t border-slate-100 space-y-1.5">
                     <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-                      Course Curriculum ({course.syllabus.length} Chapters):
+                      {t('Course Curriculum')} ({course.syllabus.length} {t('modulesCount')}):
                     </span>
                     <ul className="space-y-1">
                       {course.syllabus.slice(0, 3).map((ch) => (
                         <li key={ch.id} className="text-xs text-slate-600 flex items-center gap-2">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                          <span className="truncate">{ch.title}</span>
+                          <span className="truncate">{t(ch.title)}</span>
                         </li>
                       ))}
                       {course.syllabus.length > 3 && (
                         <li className="text-[11px] text-emerald-700 font-semibold pl-5">
-                          + {course.syllabus.length - 3} more hands-on modules
+                          + {course.syllabus.length - 3} {t('modulesCount')}
                         </li>
                       )}
                     </ul>
@@ -206,7 +208,7 @@ export default function CourseCatalogPage() {
                     </span>
                     <span>•</span>
                     <span className="flex items-center gap-1">
-                      <BookOpen className="w-3.5 h-3.5 text-slate-400" /> {course.enrolled_count} Learners
+                      <BookOpen className="w-3.5 h-3.5 text-slate-400" /> {course.enrolled_count} {t('activeLearners')}
                     </span>
                   </div>
 
@@ -215,7 +217,7 @@ export default function CourseCatalogPage() {
                       href={`/courses/${course.id}`}
                       className="px-3 py-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
                     >
-                      Details
+                      {t('viewCurriculum')}
                     </Link>
 
                     <button
@@ -229,13 +231,13 @@ export default function CourseCatalogPage() {
                     >
                       {isEnrolledSuccess ? (
                         <>
-                          <CheckCircle2 className="w-3.5 h-3.5" /> Enrolled! Launching...
+                          <CheckCircle2 className="w-3.5 h-3.5" /> {t('enrolledSuccess')}
                         </>
                       ) : isEnrolling ? (
-                        'Enrolling...'
+                        t('enrolling')
                       ) : (
                         <>
-                          Enroll Now <ArrowRight className="w-3.5 h-3.5" />
+                          {t('enrollNow')} <ArrowRight className="w-3.5 h-3.5" />
                         </>
                       )}
                     </button>

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
+import { useTranslation } from '@/context/LanguageContext';
 import RoleGate from '@/components/RoleGate';
 import { Enrollment, Course, Announcement } from '@/types/database';
 import { getStudentEnrollments } from '@/lib/services/enrollment.service';
@@ -22,6 +23,7 @@ import {
 
 export default function StudentDashboardPage() {
   const { profile } = useAuth();
+  const { t } = useTranslation();
   const [enrollmentsWithCourses, setEnrollmentsWithCourses] = useState<{ enrollment: Enrollment; course: Course }[]>([]);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
@@ -54,13 +56,13 @@ export default function StudentDashboardPage() {
         <div className="bg-gradient-to-r from-emerald-800 via-teal-800 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <div className="inline-flex items-center gap-2 bg-emerald-700/60 border border-emerald-500/40 px-3 py-1 rounded-full text-xs font-semibold text-emerald-200 mb-3">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-300" /> Active Student Cohort
+              <Sparkles className="w-3.5 h-3.5 text-emerald-300" /> {t('Active Student Cohort', 'Active Student Cohort')}
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Welcome back, {profile?.full_name || 'Young Innovator'}! 👋
+              {t('Welcome back,', 'Welcome back,')} {profile?.full_name || t('Young Innovator', 'Young Innovator')}! 👋
             </h1>
             <p className="mt-1 text-xs sm:text-sm text-slate-200">
-              Continue your AI and digital skills journey. Complete today&apos;s coding challenge!
+              {t("Continue your AI and digital skills journey. Complete today's coding challenge!", "Continue your AI and digital skills journey. Complete today's coding challenge!")}
             </p>
           </div>
 
@@ -69,7 +71,7 @@ export default function StudentDashboardPage() {
               href="/courses"
               className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 shrink-0"
             >
-              <BookOpen className="w-4 h-4" /> Browse More Courses
+              <BookOpen className="w-4 h-4" /> {t('Browse More Courses', 'Browse More Courses')}
             </Link>
           </div>
         </div>
@@ -82,7 +84,7 @@ export default function StudentDashboardPage() {
               <BookOpen className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Active Courses</span>
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">{t('Active Courses', 'Active Courses')}</span>
               <span className="text-2xl font-black text-slate-900">{activeCount}</span>
             </div>
           </div>
@@ -92,7 +94,7 @@ export default function StudentDashboardPage() {
               <CheckCircle className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Completed Chapters</span>
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">{t('Completed Chapters', 'Completed Chapters')}</span>
               <span className="text-2xl font-black text-slate-900">{totalChaptersCompleted}</span>
             </div>
           </div>
@@ -102,8 +104,8 @@ export default function StudentDashboardPage() {
               <Clock className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Learning Time</span>
-              <span className="text-2xl font-black text-slate-900">{estimatedHours} hrs</span>
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">{t('Learning Time', 'Learning Time')}</span>
+              <span className="text-2xl font-black text-slate-900">{estimatedHours} {t('hoursShort', 'hrs')}</span>
             </div>
           </div>
 
@@ -112,7 +114,7 @@ export default function StudentDashboardPage() {
               <Trophy className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Completed Certificates</span>
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">{t('Achievement Badges', 'Achievement Badges')}</span>
               <span className="text-2xl font-black text-slate-900">{completedCount}</span>
             </div>
           </div>
@@ -128,24 +130,24 @@ export default function StudentDashboardPage() {
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                    <GraduationCap className="w-5 h-5 text-emerald-600" /> My Learning Programs
+                    <GraduationCap className="w-5 h-5 text-emerald-600" /> {t('My Learning Programs', 'My Learning Programs')}
                   </h2>
-                  <p className="text-xs text-slate-500">Pick up where you left off</p>
+                  <p className="text-xs text-slate-500">{t('Pick up where you left off', 'Pick up where you left off')}</p>
                 </div>
               </div>
 
               {loading ? (
-                <div className="text-center py-10 text-slate-500 text-xs">Loading your enrollments...</div>
+                <div className="text-center py-10 text-slate-500 text-xs">{t('Loading your enrollments...', 'Loading your enrollments...')}</div>
               ) : enrollmentsWithCourses.length === 0 ? (
                 <div className="text-center py-12 border-2 border-dashed border-slate-200 rounded-xl">
                   <BookOpen className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-                  <p className="text-sm font-bold text-slate-800">You are not enrolled in any courses yet</p>
-                  <p className="text-xs text-slate-500 mt-1 mb-4">Choose from free programs like AI Micro Degree and Web Dev.</p>
+                  <p className="text-sm font-bold text-slate-800">{t('You are not enrolled in any courses yet', 'You are not enrolled in any courses yet')}</p>
+                  <p className="text-xs text-slate-500 mt-1 mb-4">{t('Choose from free programs like AI Micro Degree and Web Dev.', 'Choose from free programs like AI Micro Degree and Web Dev.')}</p>
                   <Link
                     href="/courses"
                     className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold"
                   >
-                    Browse Catalog <ArrowRight className="w-3.5 h-3.5" />
+                    {t('Browse Course Catalog')} <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
               ) : (
@@ -158,21 +160,21 @@ export default function StudentDashboardPage() {
                       <div className="space-y-2 flex-1">
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
-                            {course.category}
+                            {t(course.category)}
                           </span>
                           <span className="text-xs text-slate-500">
-                            {enrollment.completed_chapters.length} of {course.syllabus.length} Chapters Complete
+                            {enrollment.completed_chapters.length} {t('of', 'of')} {course.syllabus.length} {t('Chapters Complete', 'Chapters Complete')}
                           </span>
                         </div>
 
                         <h3 className="text-base font-bold text-slate-900">
-                          {course.title}
+                          {t(course.title)}
                         </h3>
 
                         {/* Progress Bar */}
                         <div className="space-y-1 max-w-md">
                           <div className="flex justify-between text-[11px] font-semibold text-slate-600">
-                            <span>Progress</span>
+                            <span>{t('Progress', 'Progress')}</span>
                             <span>{enrollment.progress_percentage}%</span>
                           </div>
                           <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
@@ -189,7 +191,7 @@ export default function StudentDashboardPage() {
                         className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 shrink-0"
                       >
                         <PlayCircle className="w-4 h-4" />
-                        {enrollment.progress_percentage === 100 ? 'Review Course' : 'Resume Lesson'}
+                        {enrollment.progress_percentage === 100 ? t('Review Course', 'Review Course') : t('Resume Lesson', 'Resume Lesson')}
                       </Link>
                     </div>
                   ))}
@@ -204,15 +206,15 @@ export default function StudentDashboardPage() {
             {/* Announcements Board */}
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2 mb-4">
-                <BellRing className="w-4 h-4 text-amber-500" /> Community Announcements
+                <BellRing className="w-4 h-4 text-amber-500" /> {t('Community Announcements', 'Community Announcements')}
               </h3>
               <div className="space-y-3">
                 {announcements.map((ann) => (
                   <div key={ann.id} className="p-3 bg-amber-50/60 border border-amber-200/80 rounded-xl text-xs space-y-1">
-                    <h4 className="font-bold text-amber-950">{ann.title}</h4>
-                    <p className="text-slate-700 leading-relaxed">{ann.content}</p>
+                    <h4 className="font-bold text-amber-950">{t(ann.title)}</h4>
+                    <p className="text-slate-700 leading-relaxed">{t(ann.content)}</p>
                     <span className="text-[10px] text-amber-800 font-semibold block pt-1">
-                      Posted by {ann.author_name}
+                      {t('Posted by', 'Posted by')} {ann.author_name}
                     </span>
                   </div>
                 ))}
@@ -225,13 +227,13 @@ export default function StudentDashboardPage() {
                 <Bot className="w-5 h-5" />
               </div>
               <h3 className="text-sm font-bold text-emerald-950 mb-1">
-                Stuck on a coding question?
+                {t('Stuck on a coding question?', 'Stuck on a coding question?')}
               </h3>
               <p className="text-xs text-emerald-800 leading-relaxed mb-4">
-                Sparky, your friendly AI mentor, is available 24/7 in the bottom-right corner to explain coding concepts in simple analogies.
+                {t('Sparky, your friendly AI mentor, is available 24/7 in the bottom-right corner to explain coding concepts in simple analogies.', 'Sparky, your friendly AI mentor, is available 24/7 in the bottom-right corner to explain coding concepts in simple analogies.')}
               </p>
               <div className="text-[11px] font-semibold text-emerald-700 flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5" /> Click the &apos;Ask AI Mentor&apos; button below!
+                <Sparkles className="w-3.5 h-3.5" /> {t('Click the Ask AI Mentor button below!', "Click the 'Ask AI Mentor' button below!")}
               </div>
             </div>
 

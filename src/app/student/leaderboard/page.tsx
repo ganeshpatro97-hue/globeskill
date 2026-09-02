@@ -134,7 +134,7 @@ export default function LeaderboardPage() {
                     Earn verified digital badges by completing sandbox challenges, quizzes, and capstones.
                   </p>
                 </div>
-                <VoiceNarrator text="आपके द्वारा अर्जित किए गए संयुक्त राष्ट्र एसडीजी अचीवमेंट बैज।" label="आवाज में सुनें" />
+                <VoiceNarrator text="Unlocked United Nations SDG achievement badges you have earned." label="Listen" />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

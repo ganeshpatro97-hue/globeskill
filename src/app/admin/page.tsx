@@ -6,6 +6,7 @@
 
 import React, { useState } from 'react';
 import RoleGate from '@/components/RoleGate';
+import SystemStatusIndicator from '@/components/SystemStatus';
 
 // Interfaces aligned with our Supabase schemas (profiles, courses, donations)
 interface AdminStat {
@@ -133,10 +134,7 @@ export default function NGOAdminDashboard() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
-              Database Live Connect
-            </span>
+            <SystemStatusIndicator compact className="bg-slate-900 border-slate-800 text-slate-200" />
             <div className="text-right text-xs">
               <p className="font-semibold text-slate-200">Super Administrator</p>
               <p className="text-slate-400">admin@globeskill.org</p>

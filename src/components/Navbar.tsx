@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { useTranslation, LanguageSwitcher } from '@/context/LanguageContext';
 import { UserRole } from '@/types/database';
 import { 
   Sparkles, 
@@ -18,14 +17,12 @@ import {
   X,
   Compass,
   Briefcase,
-  FileCheck,
   Award,
   Code2
 } from 'lucide-react';
 
 export default function Navbar() {
   const { profile, role, switchDemoRole, logout } = useAuth();
-  const { t } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -38,18 +35,18 @@ export default function Navbar() {
   };
 
   const getPortalLabel = () => {
-    if (role === 'trainer') return t('roleTrainer');
-    if (role === 'admin') return t('roleAdmin');
-    if (role === 'donor') return t('roleDonor');
+    if (role === 'trainer') return 'Trainer Studio';
+    if (role === 'admin') return 'Admin Center';
+    if (role === 'donor') return 'Donor Hub';
     if (role === 'recruiter') return 'Recruiter Hub';
-    return t('roleStudent');
+    return 'Student Portal';
   };
 
   const rolesList: { id: UserRole; label: string; icon: React.ReactNode }[] = [
-    { id: 'student', label: t('roleStudent'), icon: <GraduationCap className="w-3.5 h-3.5" /> },
-    { id: 'trainer', label: t('roleTrainer'), icon: <BookOpen className="w-3.5 h-3.5" /> },
-    { id: 'admin', label: t('roleAdmin'), icon: <ShieldCheck className="w-3.5 h-3.5" /> },
-    { id: 'donor', label: t('roleDonor'), icon: <Heart className="w-3.5 h-3.5" /> },
+    { id: 'student', label: 'Student', icon: <GraduationCap className="w-3.5 h-3.5" /> },
+    { id: 'trainer', label: 'Trainer', icon: <BookOpen className="w-3.5 h-3.5" /> },
+    { id: 'admin', label: 'Admin', icon: <ShieldCheck className="w-3.5 h-3.5" /> },
+    { id: 'donor', label: 'Donor', icon: <Heart className="w-3.5 h-3.5" /> },
     { id: 'recruiter', label: 'Recruiter', icon: <Briefcase className="w-3.5 h-3.5" /> },
   ];
 
@@ -65,23 +62,23 @@ export default function Navbar() {
             </div>
             <div>
               <span className="font-extrabold text-slate-900 text-lg tracking-tight group-hover:text-emerald-700 transition-colors">
-                {t('brand')}
+                GlobeSkill
               </span>
               <span className="hidden sm:inline-block ml-2 text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded-full">
-                AI &amp; Tech Education
+                AI & Tech Education
               </span>
             </div>
           </Link>
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-3.5 text-xs font-semibold text-slate-600">
+        <nav className="hidden md:flex items-center gap-4 text-xs font-semibold text-slate-600">
           <Link 
             href="/courses" 
             className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/courses' ? 'text-emerald-700 font-bold' : ''}`}
           >
             <Compass className="w-3.5 h-3.5 text-emerald-600" />
-            {t('coursesNav')}
+            Courses
           </Link>
           <Link 
             href="/sandbox" 
@@ -130,16 +127,13 @@ export default function Navbar() {
             className={`flex items-center gap-1 hover:text-emerald-700 transition-colors ${pathname === '/donate' ? 'text-emerald-700 font-bold' : ''}`}
           >
             <Heart className="w-3.5 h-3.5 text-rose-500" />
-            {t('supportUsNav')}
+            Support Us
           </Link>
         </nav>
 
-        {/* Right Section: Language Switcher, Role Switcher & User Profile */}
+        {/* Right Section: Role Switcher & User Profile */}
         <div className="hidden lg:flex items-center gap-3">
           
-          {/* Language Switcher */}
-          <LanguageSwitcher />
-
           {/* Quick Demo Role Switcher */}
           <div className="flex items-center bg-slate-100/90 p-1 rounded-lg border border-slate-200 text-xs">
             <span className="text-[11px] font-medium text-slate-500 px-2 flex items-center gap-1">
@@ -149,7 +143,7 @@ export default function Navbar() {
               <button
                 key={r.id}
                 onClick={() => switchDemoRole(r.id)}
-                className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
                   role === r.id
                     ? 'bg-emerald-600 text-white shadow-xs'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
@@ -186,22 +180,21 @@ export default function Navbar() {
                 href="/login"
                 className="px-3 py-1.5 text-xs font-semibold text-slate-700 hover:text-slate-900"
               >
-                {t('loginBtn')}
+                Log In
               </Link>
               <Link
                 href="/signup"
                 className="px-3.5 py-1.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-2xs"
               >
-                {t('signupBtn')}
+                Sign Up
               </Link>
             </div>
           )}
 
         </div>
 
-        {/* Mobile menu toggle & Language */}
+        {/* Mobile menu toggle */}
         <div className="flex lg:hidden items-center gap-2">
-          <LanguageSwitcher />
           {profile && (
             <Link
               href={getPortalLink()}
@@ -230,14 +223,28 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="p-2 text-sm font-semibold text-slate-800 hover:bg-slate-50 rounded-md"
             >
-              {t('coursesNav')}
+              Courses
+            </Link>
+            <Link 
+              href="/sandbox" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 text-sm font-semibold text-slate-800 hover:bg-slate-50 rounded-md"
+            >
+              Sandbox
+            </Link>
+            <Link 
+              href="/student/challenges" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 text-sm font-semibold text-slate-800 hover:bg-slate-50 rounded-md"
+            >
+              Quests
             </Link>
             <Link 
               href="/student/portfolio" 
               onClick={() => setMobileMenuOpen(false)}
               className="p-2 text-sm font-semibold text-slate-800 hover:bg-slate-50 rounded-md flex items-center justify-between"
             >
-              <span>AI Resume &amp; Portfolio</span>
+              <span>Portfolio</span>
               <Sparkles className="w-4 h-4 text-amber-500" />
             </Link>
             <Link 
@@ -245,7 +252,7 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="p-2 text-sm font-semibold text-slate-800 hover:bg-slate-50 rounded-md flex items-center justify-between"
             >
-              <span>CSR Recruiters Hub</span>
+              <span>Recruiter Hub</span>
               <Briefcase className="w-4 h-4 text-teal-600" />
             </Link>
             <Link 
@@ -253,7 +260,7 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="p-2 text-sm font-semibold text-slate-800 hover:bg-slate-50 rounded-md flex items-center justify-between"
             >
-              <span>{t('supportUsNav')}</span>
+              <span>Support Us</span>
               <Heart className="w-4 h-4 text-rose-500" />
             </Link>
             <Link 
@@ -261,7 +268,7 @@ export default function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="p-2 text-sm font-semibold text-emerald-800 bg-emerald-50 rounded-md"
             >
-              Open {getPortalLabel()} ({role})
+              {getPortalLabel()} ({role})
             </Link>
           </div>
 
@@ -290,4 +297,3 @@ export default function Navbar() {
     </header>
   );
 }
-

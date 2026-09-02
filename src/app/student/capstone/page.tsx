@@ -119,7 +119,7 @@ export default function CapstonePage() {
                 </h2>
                 <p className="text-xs text-slate-500">Provide details about your web app or Python program.</p>
               </div>
-              <VoiceNarrator text="कृपया अपने अंतिम प्रोजेक्ट का शीर्षक और विवरण दर्ज करें ताकि एआई जूरी इसका मूल्यांकन कर सके।" label="आवाज में सुनें" />
+              <VoiceNarrator text="Please enter your capstone project title and description for AI Jury evaluation." label="Listen" />
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">

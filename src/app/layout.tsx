@@ -30,10 +30,21 @@ export const metadata: Metadata = {
   keywords: ["GlobeSkill", "AI Education", "Digital Skills", "NGO", "Non-Profit Education", "Youth Tech", "PWA", "Offline Learning"],
   authors: [{ name: "GlobeSkill Initiative" }],
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icon-192.png",
+    shortcut: "/icon-192.png",
+    apple: "/icon-192.png",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "GlobeSkill",
+  },
 };
 
 import OfflineStatusBanner from "@/components/OfflineStatusBanner";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
+import AppUpdateNotifier from "@/components/AppUpdateNotifier";
 
 export default function RootLayout({
   children,
@@ -53,6 +64,7 @@ export default function RootLayout({
             </div>
             <Footer />
             <AiLearningAssistant />
+            <AppUpdateNotifier />
           </AuthProvider>
         </LanguageProvider>
       </body>

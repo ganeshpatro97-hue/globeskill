@@ -96,9 +96,7 @@ export default function StudentPortfolioPage() {
       
       // Fallback data
       setResume({
-        summary: language === 'hi' 
-          ? "एक उत्साही कोडिंग और एआई छात्र जो डिजिटल समाधान विकसित करने और कोडिंग के माध्यम से स्थानीय सामुदायिक समस्याओं को हल करने में रुचि रखता है। वेब प्रौद्योगिकियों में मजबूत पकड़ और व्यावहारिक अनुप्रयोगों का अनुभव।"
-          : "An enthusiastic coding and AI student passionate about developing digital solutions and solving local community problems through software engineering. Demonstrated solid base in web technologies with practical application experience.",
+        summary: "An enthusiastic coding and AI student passionate about developing digital solutions and solving local community problems through software engineering. Demonstrated solid base in web technologies with practical application experience.",
         skills: [
           "HTML5 & CSS3", 
           "JavaScript (ES6+)", 
@@ -165,9 +163,7 @@ export default function StudentPortfolioPage() {
             if (!prev) return null;
             return {
               ...prev,
-              summary: language === 'hi'
-                ? "एआई कोडिंग मेंटर द्वारा प्रमाणित जूनियर सॉफ्टवेयर डेवलपर। मैंने वेब डेवलपमेंट, क्लाउड-नेटिव डेटाबेस (Supabase) और जेनरेटिव एआई एपीआई इंटीग्रेशन में महारत हासिल की है।"
-                : "Certified Junior Software Developer validated by the GlobeSkill AI Coding Mentor. Expertly trained in dynamic React/Next.js interfaces, cloud-hosted relational databases, and secure payments sync."
+              summary: "Certified Junior Software Developer validated by the GlobeSkill AI Coding Mentor. Expertly trained in dynamic React/Next.js interfaces, cloud-hosted relational databases, and secure payments sync."
             };
           });
           setSyncStatus('synced');

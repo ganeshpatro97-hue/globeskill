@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Sparkles } from 'lucide-react';
+import { Volume2, VolumeX } from 'lucide-react';
 import { ttsEngine } from '@/lib/voice/tts-engine';
-import { useTranslation, LanguageCode } from '@/context/LanguageContext';
+import { LanguageCode } from '@/context/LanguageContext';
 
 interface VoiceNarratorProps {
   text: string;
@@ -12,11 +12,8 @@ interface VoiceNarratorProps {
   className?: string;
 }
 
-export default function VoiceNarrator({ text, lang, label, className = '' }: VoiceNarratorProps) {
-  const { language: currentLang } = useTranslation();
+export default function VoiceNarrator({ text, lang = 'en', label, className = '' }: VoiceNarratorProps) {
   const [isPlaying, setIsPlaying] = useState(false);
-
-  const targetLang = lang || currentLang;
 
   useEffect(() => {
     return () => {
@@ -34,7 +31,7 @@ export default function VoiceNarrator({ text, lang, label, className = '' }: Voi
       setIsPlaying(true);
       const success = ttsEngine.speak(
         text,
-        targetLang,
+        lang,
         () => setIsPlaying(false),
         () => setIsPlaying(false)
       );
@@ -51,13 +48,13 @@ export default function VoiceNarrator({ text, lang, label, className = '' }: Voi
           ? 'bg-emerald-600 text-white shadow-xs animate-pulse'
           : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80'
       } ${className}`}
-      title="Listen Aloud in Native Language (आवाज में सुनें)"
+      title="Listen Aloud"
       aria-label="Toggle voice narration"
     >
       {isPlaying ? (
         <>
           <VolumeX className="w-3.5 h-3.5 animate-bounce" />
-          <span>{label || 'Stop Voice'}</span>
+          <span>{label || 'Stop'}</span>
           <span className="flex gap-0.5 ml-1">
             <span className="w-1 h-3 bg-white animate-pulse [animation-delay:0.1s]"></span>
             <span className="w-1 h-3 bg-white animate-pulse [animation-delay:0.3s]"></span>
@@ -67,7 +64,7 @@ export default function VoiceNarrator({ text, lang, label, className = '' }: Voi
       ) : (
         <>
           <Volume2 className="w-3.5 h-3.5 text-emerald-600" />
-          <span>{label || 'Listen (आवाज)'}</span>
+          <span>{label || 'Listen'}</span>
         </>
       )}
     </button>

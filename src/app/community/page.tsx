@@ -275,7 +275,7 @@ export default function CommunityPage() {
                     Capture parent reflections on how GlobeSkill is transforming their child&apos;s digital curiosity.
                   </p>
                 </div>
-                <VoiceNarrator text="कृपया अपने बच्चे की शिक्षा और आत्मविश्वास में वृद्धि के बारे में अपने विचार साझा करें।" label="आवाज में सुनें" />
+                <VoiceNarrator text="Please share your thoughts on your child's education and confidence growth." label="Listen" />
               </div>
 
               {submitNotice && (
@@ -364,7 +364,7 @@ export default function CommunityPage() {
 
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">
-                    Parent Qualitative Reflection (अभिभावक की प्रतिक्रिया)
+                    Parent Qualitative Reflection
                   </label>
                   <textarea
                     rows={4}

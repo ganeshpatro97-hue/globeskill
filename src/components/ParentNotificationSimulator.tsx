@@ -10,7 +10,7 @@ export default function ParentNotificationSimulator() {
   const [parentPhone, setParentPhone] = useState('+91 98765 43210');
   const [channel, setChannel] = useState<'whatsapp' | 'sms'>('whatsapp');
   const [trigger, setTrigger] = useState<NotificationTrigger>('COURSE_COMPLETED');
-  const [lang, setLang] = useState<LanguageCode>('hi');
+  const [lang, setLang] = useState<LanguageCode>('en');
   const [isSending, setIsSending] = useState(false);
   const [sentNotice, setSentNotice] = useState<string | null>(null);
 

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useTranslation } from '@/context/LanguageContext';
 import { UserRole } from '@/types/database';
 import { 
   GraduationCap, 
@@ -18,6 +19,7 @@ import {
 export default function LoginPage() {
   const router = useRouter();
   const { login, switchDemoRole } = useAuth();
+  const { t } = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,28 +29,28 @@ export default function LoginPage() {
   const demoAccounts = [
     {
       role: 'student' as UserRole,
-      title: 'Demo Student',
+      title: t('roleStudent'),
       email: 'student.rohit@globeskill.org',
       icon: <GraduationCap className="w-4 h-4 text-emerald-600" />,
       targetPath: '/student',
     },
     {
       role: 'trainer' as UserRole,
-      title: 'Demo Trainer',
+      title: t('roleTrainer'),
       email: 'trainer.priya@globeskill.org',
       icon: <BookOpen className="w-4 h-4 text-teal-600" />,
       targetPath: '/trainer',
     },
     {
       role: 'admin' as UserRole,
-      title: 'Demo NGO Admin',
+      title: t('roleAdmin'),
       email: 'admin@globeskill.org',
       icon: <ShieldCheck className="w-4 h-4 text-blue-600" />,
       targetPath: '/admin',
     },
     {
       role: 'donor' as UserRole,
-      title: 'Demo Donor',
+      title: t('roleDonor'),
       email: 'donor.vikram@techgives.org',
       icon: <Heart className="w-4 h-4 text-rose-500" />,
       targetPath: '/donor',
@@ -96,9 +98,9 @@ export default function LoginPage() {
           <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-black text-xl mx-auto mb-3 shadow-xs">
             G
           </div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Welcome Back</h1>
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">{t('loginBtn')}</h1>
           <p className="mt-2 text-xs text-slate-600">
-            Log in to access your GlobeSkill learning or management portal.
+            {t('Log in to access your GlobeSkill learning or management portal.', 'Log in to access your GlobeSkill learning or management portal.')}
           </p>
         </div>
 
@@ -111,7 +113,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Email Address</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">{t('emailLabel')}</label>
             <input
               type="email"
               required
@@ -124,8 +126,8 @@ export default function LoginPage() {
 
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="block text-xs font-semibold text-slate-700">Password</label>
-              <span className="text-[11px] text-emerald-700 hover:underline cursor-pointer">Forgot password?</span>
+              <label className="block text-xs font-semibold text-slate-700">{t('passwordLabel')}</label>
+              <span className="text-[11px] text-emerald-700 hover:underline cursor-pointer">{t('Forgot password?', 'Forgot password?')}</span>
             </div>
             <input
               type="password"
@@ -141,7 +143,7 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
           >
-            {loading ? 'Authenticating...' : 'Sign In'}
+            {loading ? t('Authenticating...', 'Authenticating...') : t('loginBtn')}
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
@@ -149,7 +151,7 @@ export default function LoginPage() {
         {/* 1-Click Demo Accounts */}
         <div className="pt-4 border-t border-slate-100">
           <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
-            <KeyRound className="w-3.5 h-3.5 text-emerald-600" /> Or Instant 1-Click Demo Sign In:
+            <KeyRound className="w-3.5 h-3.5 text-emerald-600" /> {t('quickDemoLogin')}:
           </div>
           <div className="grid grid-cols-2 gap-2">
             {demoAccounts.map((acc) => (
@@ -172,9 +174,9 @@ export default function LoginPage() {
         </div>
 
         <div className="text-center pt-2 text-xs text-slate-600">
-          Do not have an account yet?{' '}
+          {t('dontHaveAccount')}{' '}
           <Link href="/signup" className="text-emerald-700 font-bold hover:underline">
-            Sign Up
+            {t('signupBtn')}
           </Link>
         </div>
 

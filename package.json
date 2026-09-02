@@ -7,9 +7,15 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:setup": "node scripts/setup-db.js"
+    "db:setup": "node scripts/setup-db.js",
+    "cap:sync": "npx cap sync",
+    "cap:open": "npx cap open android",
+    "cap:apk": "cd android && gradlew assembleDebug"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.1",
+    "@capacitor/cli": "^8.5.1",
+    "@capacitor/core": "^8.5.1",
     "@supabase/supabase-js": "^2.112.4",
     "canvas-confetti": "^1.9.4",
     "lucide-react": "^1.37.0",
