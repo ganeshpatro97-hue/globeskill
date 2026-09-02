@@ -54,6 +54,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-screen bg-slate-50 text-slate-900 antialiased flex flex-col font-sans selection:bg-emerald-100 selection:text-emerald-900">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+                var reg = function() { navigator.serviceWorker.register('/sw.js', { scope: '/' }); };
+                if (document.readyState === 'complete') { reg(); } else { window.addEventListener('load', reg); }
+              }
+            `,
+          }}
+        />
         <ServiceWorkerRegister />
         <LanguageProvider>
           <AuthProvider>

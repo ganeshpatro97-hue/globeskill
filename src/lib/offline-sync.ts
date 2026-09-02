@@ -383,15 +383,21 @@ export function useOfflineSync() {
 // ==========================================
 export function registerServiceWorker(): void {
   if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
+    const register = () => {
       navigator.serviceWorker
-        .register('/sw.js')
+        .register('/sw.js', { scope: '/' })
         .then((registration) => {
           console.log('GlobeSkill ServiceWorker registered successfully with scope:', registration.scope);
         })
         .catch((error) => {
-          console.warn('GlobeSkill ServiceWorker registration skipped:', error);
+          console.warn('GlobeSkill ServiceWorker registration error:', error);
         });
-    });
+    };
+
+    if (document.readyState === 'complete') {
+      register();
+    } else {
+      window.addEventListener('load', register);
+    }
   }
 }

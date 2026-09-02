@@ -12,6 +12,12 @@
   "dir": "ltr",
   "lang": "en",
   "categories": ["education", "productivity", "social"],
+  "serviceworker": {
+    "src": "/sw.js",
+    "scope": "/",
+    "type": "classic",
+    "update_via_cache": "none"
+  },
   "icons": [
     {
       "src": "/icon-192.png",
